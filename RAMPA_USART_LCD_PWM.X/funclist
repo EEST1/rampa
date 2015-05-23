@@ -1,0 +1,25 @@
+___awdiv: CODE, 32268 0 164
+_decode: CODE, 31618 0 98
+_tic_timer0: CODE, 31244 0 28
+_pic_ini13: CODE, 31436 0 48
+_write_DATA: CODE, 31148 0 14
+__stringdata: SMALLCONST, 8222 0 8
+_char2LCD: CODE, 31162 0 14
+_RAMPA_tic: CODE, 31192 0 26
+_myISR: CODE, 8200 0 23924
+___awmod: CODE, 32124 0 144
+_main: CODE, 32432 0 336
+_msg2LCD: CODE, 31390 0 46
+_Send_Disp: CODE, 31538 0 80
+_write_CMD: CODE, 31134 0 14
+_assign_id: CODE, 31126 0 8
+_Send_4Disp: CODE, 31716 0 128
+_timer_ini13: CODE, 31218 0 26
+__initialization: CODE, 31484 0 44
+_LCD_init: CODE, 31844 0 136
+_LCD_tic: CODE, 31176 0 16
+_write_LCD: CODE, 31310 0 40
+_usart_ini13: CODE, 31350 0 40
+_broadcast_id: SMALLCONST, 8221 0 1
+_read_BUSY: CODE, 31272 0 38
+Total: 25421
