@@ -56,3 +56,4 @@ unsigned char rampa_status=ON;
 unsigned char decode(unsigned char);    //decodifica el paquete
 void assign_id(unsigned char);          //inicializa el id del esclavo
 void RAMPA_tic(void);
+void Transmitir(char);

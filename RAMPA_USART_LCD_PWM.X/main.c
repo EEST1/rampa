@@ -41,16 +41,16 @@ void main(void) {
                                     //el multiplexado de displays
     usart_ini13();
     ei();                           //habilitación global de interrupciones
-    LCD_init();                     //requiere interrupciones de timer
+   // LCD_init();                     //requiere interrupciones de timer
     assign_id('a');                 //en caso de tratarse de un esclavo, asigna
                                     //el número enviado a slave_id
-    msg2LCD("Welcome");
+  //  msg2LCD("Welcome");
     rampa_status=OFF;               //global definida en rampa
     tiempo_rampa=0;                 //global lleva la cuenta en milisegundos
 
     while(1){
         if(caracter != backup){
-            char2LCD(caracter);
+  //          char2LCD(caracter);
             backup=caracter;
 /*decodifico el comando la secuencia correcta es <address> <comando><EOM>
  * address: es el estado que verifica si es solicitado el dispositivo especico

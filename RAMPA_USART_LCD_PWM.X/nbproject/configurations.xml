@@ -8,8 +8,8 @@
       <itemPath>Ap_ini.h</itemPath>
       <itemPath>Lemos.h</itemPath>
       <itemPath>Robello.h</itemPath>
-      <itemPath>../../MisLibrerias/lcd.h</itemPath>
       <itemPath>rampa.h</itemPath>
+      <itemPath>lcd.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -22,8 +22,8 @@
       <itemPath>Ap_ini.c</itemPath>
       <itemPath>Lemos.C</itemPath>
       <itemPath>Robello.c</itemPath>
-      <itemPath>../../MisLibrerias/lcd.c</itemPath>
       <itemPath>rampa.c</itemPath>
+      <itemPath>lcd.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -43,7 +43,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>Simulator</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>1.33</languageToolchainVersion>
+        <languageToolchainVersion>1.34</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <compileType>
@@ -54,7 +54,6 @@
         <archiverTool>
         </archiverTool>
         <loading>
-          <loadableFile>../../../../GIT/pic18_non_j/MPLAB.X/dist/PIC18F4550_XC8/production/MPLAB.X.production.hex</loadableFile>
           <useAlternateLoadableFile>false</useAlternateLoadableFile>
           <parseOnProdLoad>false</parseOnProdLoad>
           <alternateLoadableFile></alternateLoadableFile>

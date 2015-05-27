@@ -48,7 +48,13 @@ unsigned char decode(unsigned char buffer){
     }
     return retorno;
 }
-
+void Transmitir(char Dato){
+    TXSTAbits.TXEN = ON;
+    while(TRMT);
+    TXREG = Dato;
+    TXSTAbits.TXEN = OFF;
+    
+}
 
 
 
