@@ -88,8 +88,8 @@ void usart_ini13 (void){
     
     //transmisión
     TXSTAbits.TX9 = 0;      //recepción y transmisión de 8 bits
-    TXSTAbits.TXEN = 0;     //Inicialmente el transmisor está desactivado.
-
+    TXSTAbits.TXEN = 1;     //el transmisor está a
+    
     //recepción
     (void) RCREG;
     (void) RCREG;

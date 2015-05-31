@@ -6363,15 +6363,6 @@ void tic_timer0(void);
 unsigned char mux_tout,bot_tout;
 unsigned int led_tout;
 
-# 14 "lcd.h"
-void LCD_init(void);
-void msg2LCD(unsigned char*);
-void char2LCD(unsigned char);
-void clear_LCD(void);
-void ret_HOME(void);
-void set_CURSOR(unsigned char);
-void LCD_tic(void);
-
 # 41 "rampa.h"
 enum estados{
 address,
@@ -6383,24 +6374,29 @@ respuesta
 
 
 
+
 unsigned char slave_id;
 const unsigned char broadcast_id = 'm';
-int tiempo_rampa=0;
-unsigned char rampa_status=1;
+unsigned int tiempo_rampa=0;
+unsigned char rampa_status=0;
 
-# 60
+# 61
 unsigned char decode(unsigned char);
-void assign_id(unsigned char);
+void assign_id(unsigned char nro_esclavo);
 void RAMPA_tic(void);
-void Transmitir(char);
-void informar(unsigned char,unsigned char,unsigned char,unsigned char);
+void transmitir(char dato);
+void informar(char *cadena,char longitud);
+void rampa_ini13(void);
 
-# 34 "main.c"
-unsigned char caracter;
+# 33 "main.c"
+unsigned char caracter_recibido;
 
 void main(void) {
-unsigned char backup,seg=0,dec=0,cent=0,mil=0,broadcast_flag=0;
-unsigned int backup_rampa;
+unsigned char backup_ultimo_caracter;
+unsigned int backup_tiempo_rampa;
+char seg=0,dec=0,cent=0,mil=0;
+char paquete[4];
+unsigned char broadcast_flag=0;
 
 pic_ini13();
 timer_ini13();
@@ -6411,19 +6407,14 @@ usart_ini13();
 
 assign_id('a');
 
-
-rampa_status = 0;
-tiempo_rampa = 0;
-TRISBbits.RB7 = 0;
-INTCON2bits.INTEDG0=0;
+rampa_ini13();
 
 while(1){
-if(caracter != backup){
+if(caracter_recibido != backup_ultimo_caracter){
+backup_ultimo_caracter=caracter_recibido;
 
-backup=caracter;
-
-# 68
-switch(decode(caracter)){
+# 65
+switch(decode(caracter_recibido)){
 case 0:;
 break;
 case 'p':{
@@ -6437,7 +6428,7 @@ LATDbits.LD2=1;
 LATDbits.LD3=0;
 rampa_status=1;
 INTCONbits.INT0IF=0;
-INTCONbits.INT0IE=0;
+INTCONbits.INT0IE=1;
 }break;
 case 'd':{
 LATDbits.LD2=0;
@@ -6448,7 +6439,7 @@ case 'l':{
 if(!broadcast_flag){
 LATDbits.LD2=1;
 LATDbits.LD3=1;
-informar(seg,dec,cent,mil);
+informar(paquete,4);
 }
 }break;
 case 'r':{
@@ -6459,22 +6450,23 @@ tiempo_rampa=0;
 }
 }
 
-if(tiempo_rampa !=backup_rampa){
+# 102
+if(tiempo_rampa !=backup_tiempo_rampa){
 
-seg=tiempo_rampa/1000;
-dec=(tiempo_rampa%1000)/100;
-cent=(tiempo_rampa%100)/10;
-mil=tiempo_rampa%10;
+paquete[0]=tiempo_rampa/1000;
+paquete[1]=(tiempo_rampa%1000)/100;
+paquete[2]=(tiempo_rampa%100)/10;
+paquete[3]=tiempo_rampa%10;
 
-backup_rampa=tiempo_rampa;
+backup_tiempo_rampa=tiempo_rampa;
 }
-Send_4Disp(seg,dec,cent,mil);
+Send_4Disp(paquete[0],paquete[1],paquete[2],paquete[3]);
 }
 }
 
 void __interrupt myISR(){
 
-# 126
+# 124
 if(TMR0IF){
 INTCONbits.TMR0IF = 0;
 TMR0L = 209;
@@ -6482,16 +6474,13 @@ TMR0H = 0xFF;
 
 tic_timer0();
 
-
-LCD_tic();
-
-
+# 135
 if(rampa_status) RAMPA_tic();
 
 
 }
 
-# 150
+
 if(TMR1IF){
 PIR1bits.TMR1IF = 0;
 TMR1L=144;
@@ -6500,7 +6489,7 @@ LATBbits.LATB7 =~ LATBbits.LATB7;
 }
 if(RCIF){
 RCIF=0;
-caracter=RCREG;
+caracter_recibido=RCREG;
 (void) RCREG;
 }
 if(INT0IF){
@@ -6508,8 +6497,6 @@ rampa_status=0;
 INTCONbits.INT0IE=0;
 INTCONbits.INT0IF=0;
 }
-
-
 
 }
 

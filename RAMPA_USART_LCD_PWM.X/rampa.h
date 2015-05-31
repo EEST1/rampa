@@ -47,18 +47,20 @@ enum estados{                       //los estados posibles
 };
 
 
+//variables globales
 
-unsigned char slave_id;     //fija el id
-const unsigned char broadcast_id = 'm';
-int tiempo_rampa=0;
-unsigned char rampa_status=ON;
+unsigned char slave_id;                     //fija el id
+const unsigned char broadcast_id = 'm';     //fija el broadcast_id
+unsigned int tiempo_rampa=0;                         //inicializa el tiempod e cuenta
+unsigned char rampa_status=OFF;             //estado de la rampa
 
 
 
 
 //funciones
 unsigned char decode(unsigned char);    //decodifica el paquete
-void assign_id(unsigned char);          //inicializa el id del esclavo
-void RAMPA_tic(void);
-void Transmitir(char);
-void informar(unsigned char,unsigned char,unsigned char,unsigned char);
+void assign_id(unsigned char nro_esclavo);          //inicializa el id del esclavo
+void RAMPA_tic(void);                   //cuenta cada interrupción de timer
+void transmitir(char dato);                  //transmite un char
+void informar(char *cadena,char longitud);
+void rampa_ini13(void);                 //inicializa la rampa

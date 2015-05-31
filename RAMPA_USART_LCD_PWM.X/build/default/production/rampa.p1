@@ -1,7 +1,34 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"17 rampa.c
+"4182 /opt/microchip/xc8/v1.33/include/pic18f4550.h
+[s S298 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S298 . TRISB0 TRISB1 TRISB2 TRISB3 TRISB4 TRISB5 TRISB6 TRISB7 ]
+"4192
+[s S299 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S299 . RB0 RB1 RB2 RB3 RB4 RB5 RB6 RB7 ]
+"4181
+[u S297 `S298 1 `S299 1 ]
+[n S297 . . . ]
+"4203
+[v _TRISBbits `VS297 ~T0 @X0 0 e@3987 ]
+"9087
+[s S544 :7 `uc 1 :1 `uc 1 ]
+[n S544 . . NOT_RBPU ]
+"9091
+[s S545 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S545 . RBIP . TMR0IP . INTEDG2 INTEDG1 INTEDG0 nRBPU ]
+"9101
+[s S546 :2 `uc 1 :1 `uc 1 :4 `uc 1 :1 `uc 1 ]
+[n S546 . . T0IP . RBPU ]
+"9086
+[u S543 `S544 1 `S545 1 `S546 1 ]
+[n S543 . . . . ]
+"9108
+[v _INTCON2bits `VS543 ~T0 @X0 0 e@4081 ]
+"23 rampa.c
 [c E5256 0 1 2 3 .. ]
 [n E5256 estados address comando fin respuesta  ]
+"64 rampa.h
+[v _transmitir `(v ~T0 @X0 0 ef1`uc ]
 "5720 /opt/microchip/xc8/v1.33/include/pic18f4550.h
 [s S368 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S368 . TX9D TRMT BRGH SENDB SYNC TXEN TX9 CSRC ]
@@ -40,8 +67,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S367 . . . . . . . . . . . . ]
 "5769
 [v _TXSTAbits `VS367 ~T0 @X0 0 e@4012 ]
-"10907
-[v _TRMT `Vb ~T0 @X0 0 e@32097 ]
 "6006
 [v _TXREG `Vuc ~T0 @X0 0 e@4013 ]
 [; ;htc.h: 21: extern const char __xc8_OPTIM_SPEED;
@@ -4856,245 +4881,289 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;rampa.h: 44: fin,
 [; ;rampa.h: 45: respuesta
 [; ;rampa.h: 47: };
-"51 rampa.h
+"52 rampa.h
 [v _slave_id `uc ~T0 @X0 1 e ]
-[; ;rampa.h: 51: unsigned char slave_id;
-"52
+[; ;rampa.h: 52: unsigned char slave_id;
+"53
 [v _broadcast_id `Cuc ~T0 @X0 1 e ]
 [i _broadcast_id
 -> -> 109 `ui `uc
 ]
-[; ;rampa.h: 52: const unsigned char broadcast_id = 'm';
-"53
-[v _tiempo_rampa `i ~T0 @X0 1 e ]
-[i _tiempo_rampa
--> 0 `i
-]
-[; ;rampa.h: 53: int tiempo_rampa=0;
+[; ;rampa.h: 53: const unsigned char broadcast_id = 'm';
 "54
+[v _tiempo_rampa `ui ~T0 @X0 1 e ]
+[i _tiempo_rampa
+-> -> 0 `i `ui
+]
+[; ;rampa.h: 54: unsigned int tiempo_rampa=0;
+"55
 [v _rampa_status `uc ~T0 @X0 1 e ]
 [i _rampa_status
--> -> 1 `i `uc
+-> -> 0 `i `uc
 ]
-[; ;rampa.h: 54: unsigned char rampa_status=1;
-[; ;rampa.h: 60: unsigned char decode(unsigned char);
-[; ;rampa.h: 61: void assign_id(unsigned char);
-[; ;rampa.h: 62: void RAMPA_tic(void);
-[; ;rampa.h: 63: void Transmitir(char);
-[; ;rampa.h: 64: void informar(unsigned char,unsigned char,unsigned char,unsigned char);
+[; ;rampa.h: 55: unsigned char rampa_status=0;
+[; ;rampa.h: 61: unsigned char decode(unsigned char);
+[; ;rampa.h: 62: void assign_id(unsigned char nro_esclavo);
+[; ;rampa.h: 63: void RAMPA_tic(void);
+[; ;rampa.h: 64: void transmitir(char dato);
+[; ;rampa.h: 65: void informar(char *cadena,char longitud);
+[; ;rampa.h: 66: void rampa_ini13(void);
 [; ;Ap_ini.h: 40: void pic_ini13(void);
 [; ;Ap_ini.h: 41: void timer_ini13(void);
 [; ;Ap_ini.h: 42: void timer1_ini13();
 [; ;Ap_ini.h: 43: void pwm_ini13(void);
 [; ;Ap_ini.h: 44: void usart_ini13 (void);
 [; ;Ap_ini.h: 45: void pwm_set(unsigned char periodo, unsigned char duty );
-"7 rampa.c
+"5 rampa.c
+[v _rampa_ini13 `(v ~T0 @X0 1 ef ]
+{
+[; ;rampa.c: 5: void rampa_ini13(void){
+[e :U _rampa_ini13 ]
+[f ]
+[; ;rampa.c: 6: rampa_status = 0;
+"6
+[e = _rampa_status -> -> 0 `i `uc ]
+[; ;rampa.c: 7: tiempo_rampa = 0;
+"7
+[e = _tiempo_rampa -> -> 0 `i `ui ]
+[; ;rampa.c: 8: TRISBbits.RB7 = 0;
+"8
+[e = . . _TRISBbits 1 7 -> -> 0 `i `uc ]
+[; ;rampa.c: 9: INTCON2bits.INTEDG0=0;
+"9
+[e = . . _INTCON2bits 1 6 -> -> 0 `i `uc ]
+[; ;rampa.c: 10: }
+"10
+[e :UE 593 ]
+}
+"12
 [v _assign_id `(v ~T0 @X0 1 ef1`uc ]
 {
-[; ;rampa.c: 7: void assign_id(unsigned char id){
+[; ;rampa.c: 12: void assign_id(unsigned char id){
 [e :U _assign_id ]
 [v _id `uc ~T0 @X0 1 r1 ]
 [f ]
-[; ;rampa.c: 8: slave_id=id;
-"8
+[; ;rampa.c: 13: slave_id=id;
+"13
 [e = _slave_id _id ]
-[; ;rampa.c: 9: }
-"9
-[e :UE 593 ]
-}
-"10
-[v _RAMPA_tic `(v ~T0 @X0 1 ef ]
-{
-[; ;rampa.c: 10: void RAMPA_tic(void){
-[e :U _RAMPA_tic ]
-[f ]
-[; ;rampa.c: 11: if(tiempo_rampa<9999)tiempo_rampa++;
-"11
-[e $ ! < _tiempo_rampa -> 9999 `i 595  ]
-[e ++ _tiempo_rampa -> 1 `i ]
-[e :U 595 ]
-[; ;rampa.c: 12: }
-"12
+[; ;rampa.c: 14: }
+"14
 [e :UE 594 ]
 }
-"14
+"15
+[v _RAMPA_tic `(v ~T0 @X0 1 ef ]
+{
+[; ;rampa.c: 15: void RAMPA_tic(void){
+[e :U _RAMPA_tic ]
+[f ]
+[; ;rampa.c: 16: if(tiempo_rampa<9999)tiempo_rampa++;
+"16
+[e $ ! < _tiempo_rampa -> -> 9999 `i `ui 596  ]
+[e ++ _tiempo_rampa -> -> 1 `i `ui ]
+[e :U 596 ]
+[; ;rampa.c: 17: }
+"17
+[e :UE 595 ]
+}
+"19
 [v _decode `(uc ~T0 @X0 1 ef1`uc ]
 {
-[; ;rampa.c: 14: unsigned char decode(unsigned char buffer){
+[; ;rampa.c: 19: unsigned char decode(unsigned char dato_a_decod){
 [e :U _decode ]
-[v _buffer `uc ~T0 @X0 1 r1 ]
+[v _dato_a_decod `uc ~T0 @X0 1 r1 ]
 [f ]
-"17
-[v F5293 `uc ~T0 @X0 1 s est_rec ]
-[i F5293
+"23
+[v F5294 `uc ~T0 @X0 1 s est_rec ]
+[i F5294
 -> . `E5256 0 `uc
 ]
-"18
-[v F5294 `uc ~T0 @X0 1 s com_rec ]
-"20
-[v _retorno `uc ~T0 @X0 1 a ]
-[; ;rampa.c: 17: static unsigned char est_rec=address;
-[; ;rampa.c: 18: static char com_rec;
-[; ;rampa.c: 20: unsigned char retorno;
-[; ;rampa.c: 22: switch(est_rec){
-"22
-[e $U 598  ]
-{
-[; ;rampa.c: 23: case address:{
-"23
-[e :U 599 ]
-{
-[; ;rampa.c: 24: if(buffer==slave_id ){
-"24
-[e $ ! == -> _buffer `i -> _slave_id `i 600  ]
-{
-[; ;rampa.c: 25: est_rec++;
 "25
-[e ++ F5293 -> -> 1 `i `uc ]
-[; ;rampa.c: 26: buffer = 0;
+[v F5295 `uc ~T0 @X0 1 s com_rec ]
 "26
-[e = _buffer -> -> 0 `i `uc ]
-[; ;rampa.c: 27: retorno='p';
-"27
-[e = _retorno -> -> 112 `ui `uc ]
-"30
-}
-[; ;rampa.c: 30: }
-[e $U 601  ]
-"31
+[v _retorno `uc ~T0 @X0 1 a ]
+[; ;rampa.c: 23: static unsigned char est_rec=address;
+[; ;rampa.c: 25: static char com_rec;
+[; ;rampa.c: 26: unsigned char retorno;
+[; ;rampa.c: 28: switch(est_rec){
+"28
+[e $U 599  ]
+{
+[; ;rampa.c: 29: case address:{
+"29
 [e :U 600 ]
-[; ;rampa.c: 31: else if(buffer == broadcast_id){
-[e $ ! == -> _buffer `i -> _broadcast_id `i 602  ]
 {
-[; ;rampa.c: 32: est_rec++;
+[; ;rampa.c: 30: if(dato_a_decod==slave_id ){
+"30
+[e $ ! == -> _dato_a_decod `i -> _slave_id `i 601  ]
+{
+[; ;rampa.c: 31: est_rec++;
+"31
+[e ++ F5294 -> -> 1 `i `uc ]
+[; ;rampa.c: 32: dato_a_decod = 0;
 "32
-[e ++ F5293 -> -> 1 `i `uc ]
-[; ;rampa.c: 33: buffer = 0;
+[e = _dato_a_decod -> -> 0 `i `uc ]
+[; ;rampa.c: 33: retorno='p';
 "33
-[e = _buffer -> -> 0 `i `uc ]
-[; ;rampa.c: 34: retorno='b';
+[e = _retorno -> -> 112 `ui `uc ]
 "34
-[e = _retorno -> -> 98 `ui `uc ]
-"36
 }
-[e :U 602 ]
-"37
+[; ;rampa.c: 34: }
+[e $U 602  ]
+"35
 [e :U 601 ]
-}
-[; ;rampa.c: 36: }
-[; ;rampa.c: 37: }break;
-[e $U 597  ]
-[; ;rampa.c: 39: case comando:{
+[; ;rampa.c: 35: else if(dato_a_decod == broadcast_id){
+[e $ ! == -> _dato_a_decod `i -> _broadcast_id `i 603  ]
+{
+[; ;rampa.c: 36: est_rec++;
+"36
+[e ++ F5294 -> -> 1 `i `uc ]
+[; ;rampa.c: 37: dato_a_decod = 0;
+"37
+[e = _dato_a_decod -> -> 0 `i `uc ]
+[; ;rampa.c: 38: retorno='b';
+"38
+[e = _retorno -> -> 98 `ui `uc ]
 "39
+}
 [e :U 603 ]
-{
-[; ;rampa.c: 40: if(buffer){
 "40
-[e $ ! != -> _buffer `i -> -> -> 0 `i `uc `i 604  ]
-{
-[; ;rampa.c: 41: com_rec=buffer;
-"41
-[e = F5294 _buffer ]
-[; ;rampa.c: 42: est_rec++;
+[e :U 602 ]
+}
+[; ;rampa.c: 39: }
+[; ;rampa.c: 40: }break;
+[e $U 598  ]
+[; ;rampa.c: 42: case comando:{
 "42
-[e ++ F5293 -> -> 1 `i `uc ]
-[; ;rampa.c: 43: buffer = 0;
-"43
-[e = _buffer -> -> 0 `i `uc ]
-[; ;rampa.c: 44: retorno=0;
-"44
-[e = _retorno -> -> 0 `i `uc ]
-"46
-}
 [e :U 604 ]
+{
+[; ;rampa.c: 43: if(dato_a_decod){
+"43
+[e $ ! != -> _dato_a_decod `i -> -> -> 0 `i `uc `i 605  ]
+{
+[; ;rampa.c: 44: com_rec=dato_a_decod;
+"44
+[e = F5295 _dato_a_decod ]
+[; ;rampa.c: 45: est_rec++;
+"45
+[e ++ F5294 -> -> 1 `i `uc ]
+[; ;rampa.c: 46: dato_a_decod = 0;
+"46
+[e = _dato_a_decod -> -> 0 `i `uc ]
+[; ;rampa.c: 47: retorno=0;
 "47
-}
-[; ;rampa.c: 46: }
-[; ;rampa.c: 47: }break;
-[e $U 597  ]
-[; ;rampa.c: 49: case fin:{
+[e = _retorno -> -> 0 `i `uc ]
 "49
+}
 [e :U 605 ]
-{
-[; ;rampa.c: 50: if(buffer=='f'){
 "50
-[e $ ! == -> _buffer `ui -> 102 `ui 606  ]
-{
-[; ;rampa.c: 51: est_rec=address;
-"51
-[e = F5293 -> . `E5256 0 `uc ]
-[; ;rampa.c: 52: retorno = com_rec;
+}
+[; ;rampa.c: 49: }
+[; ;rampa.c: 50: }break;
+[e $U 598  ]
+[; ;rampa.c: 52: case fin:{
 "52
-[e = _retorno F5294 ]
-[; ;rampa.c: 53: com_rec=0;
-"53
-[e = F5294 -> -> 0 `i `uc ]
-"55
-}
 [e :U 606 ]
+{
+[; ;rampa.c: 53: if(dato_a_decod=='f'){
+"53
+[e $ ! == -> _dato_a_decod `ui -> 102 `ui 607  ]
+{
+[; ;rampa.c: 54: est_rec=address;
+"54
+[e = F5294 -> . `E5256 0 `uc ]
+[; ;rampa.c: 55: retorno = com_rec;
+"55
+[e = _retorno F5295 ]
+[; ;rampa.c: 56: com_rec=0;
 "56
-}
-[; ;rampa.c: 55: }
-[; ;rampa.c: 56: }break;
-[e $U 597  ]
-"57
-}
-[; ;rampa.c: 57: }
-[e $U 597  ]
-"22
-[e :U 598 ]
-[e [\ F5293 , $ -> . `E5256 0 `uc 599
- , $ -> . `E5256 1 `uc 603
- , $ -> . `E5256 2 `uc 605
- 597 ]
-"57
-[e :U 597 ]
-[; ;rampa.c: 58: return retorno;
+[e = F5295 -> -> 0 `i `uc ]
 "58
-[e ) _retorno ]
-[e $UE 596  ]
-[; ;rampa.c: 59: }
+}
+[e :U 607 ]
 "59
-[e :UE 596 ]
 }
+[; ;rampa.c: 58: }
+[; ;rampa.c: 59: }break;
+[e $U 598  ]
 "60
-[v _informar `(v ~T0 @X0 1 ef4`uc`uc`uc`uc ]
-{
-[; ;rampa.c: 60: void informar(unsigned char seg,unsigned char dec,unsigned char cent,unsigned char mil){
-[e :U _informar ]
-[v _seg `uc ~T0 @X0 1 r1 ]
-[v _dec `uc ~T0 @X0 1 r2 ]
-[v _cent `uc ~T0 @X0 1 r3 ]
-[v _mil `uc ~T0 @X0 1 r4 ]
-[f ]
-[; ;rampa.c: 63: }
-"63
-[e :UE 607 ]
 }
-"64
-[v _Transmitir `(v ~T0 @X0 1 ef1`uc ]
+[; ;rampa.c: 60: }
+[e $U 598  ]
+"28
+[e :U 599 ]
+[e [\ F5294 , $ -> . `E5256 0 `uc 600
+ , $ -> . `E5256 1 `uc 604
+ , $ -> . `E5256 2 `uc 606
+ 598 ]
+"60
+[e :U 598 ]
+[; ;rampa.c: 61: return retorno;
+"61
+[e ) _retorno ]
+[e $UE 597  ]
+[; ;rampa.c: 62: }
+"62
+[e :UE 597 ]
+}
+"63
+[v _informar `(v ~T0 @X0 1 ef2`*uc`uc ]
 {
-[; ;rampa.c: 64: void Transmitir(char Dato){
-[e :U _Transmitir ]
-[v _Dato `uc ~T0 @X0 1 r1 ]
+[; ;rampa.c: 63: void informar(char *dato, char longitud){
+[e :U _informar ]
+[v _dato `*uc ~T0 @X0 1 r1 ]
+[v _longitud `uc ~T0 @X0 1 r2 ]
 [f ]
-[; ;rampa.c: 65: TXSTAbits.TXEN = 1;
+"64
+[v _i `uc ~T0 @X0 1 a ]
+[; ;rampa.c: 64: char i=0;
+[e = _i -> -> 0 `i `uc ]
+[; ;rampa.c: 65: transmitir(slave_id);
 "65
-[e = . . _TXSTAbits 0 5 -> -> 1 `i `uc ]
-[; ;rampa.c: 66: while(TRMT);
+[e ( _transmitir (1 _slave_id ]
+[; ;rampa.c: 66: for(i=0;i<longitud;i++) transmitir(*(dato+i)+48);
 "66
-[e $U 609  ]
-[e :U 610 ]
+{
+[e = _i -> -> 0 `i `uc ]
+[e $U 612  ]
 [e :U 609 ]
-[e $ _TRMT 610  ]
-[e :U 611 ]
-[; ;rampa.c: 67: TXREG = Dato;
-"67
-[e = _TXREG _Dato ]
-[; ;rampa.c: 68: TXSTAbits.TXEN = 0;
+[e ( _transmitir (1 -> + -> *U + _dato * -> _i `ux -> -> # *U _dato `ui `ux `i -> 48 `i `uc ]
+[e ++ _i -> -> 1 `i `uc ]
+[e :U 612 ]
+[e $ < -> _i `i -> _longitud `i 609  ]
+[e :U 610 ]
+}
+[; ;rampa.c: 68: transmitir('f');
 "68
-[e = . . _TXSTAbits 0 5 -> -> 0 `i `uc ]
+[e ( _transmitir (1 -> -> 102 `ui `uc ]
 [; ;rampa.c: 70: }
 "70
 [e :UE 608 ]
+}
+"71
+[v _transmitir `(v ~T0 @X0 1 ef1`uc ]
+{
+[; ;rampa.c: 71: void transmitir(char Dato){
+[e :U _transmitir ]
+[v _Dato `uc ~T0 @X0 1 r1 ]
+[f ]
+[; ;rampa.c: 73: while(!TXSTAbits.TRMT);
+"73
+[e $U 614  ]
+[e :U 615 ]
+[e :U 614 ]
+[e $ ! != -> . . _TXSTAbits 0 1 `i -> -> -> 0 `i `Vuc `i 615  ]
+[e :U 616 ]
+[; ;rampa.c: 74: TXREG = Dato;
+"74
+[e = _TXREG _Dato ]
+[; ;rampa.c: 75: while(!TXSTAbits.TRMT);
+"75
+[e $U 617  ]
+[e :U 618 ]
+[e :U 617 ]
+[e $ ! != -> . . _TXSTAbits 0 1 `i -> -> -> 0 `i `Vuc `i 618  ]
+[e :U 619 ]
+[; ;rampa.c: 78: }
+"78
+[e :UE 613 ]
 }

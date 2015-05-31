@@ -6313,17 +6313,19 @@ respuesta
 
 
 
+
 unsigned char slave_id;
 const unsigned char broadcast_id = 'm';
-int tiempo_rampa=0;
-unsigned char rampa_status=1;
+unsigned int tiempo_rampa=0;
+unsigned char rampa_status=0;
 
-# 60
+# 61
 unsigned char decode(unsigned char);
-void assign_id(unsigned char);
+void assign_id(unsigned char nro_esclavo);
 void RAMPA_tic(void);
-void Transmitir(char);
-void informar(unsigned char,unsigned char,unsigned char,unsigned char);
+void transmitir(char dato);
+void informar(char *cadena,char longitud);
+void rampa_ini13(void);
 
 # 40 "Ap_ini.h"
 void pic_ini13(void);
@@ -6333,7 +6335,14 @@ void pwm_ini13(void);
 void usart_ini13 (void);
 void pwm_set(unsigned char periodo, unsigned char duty );
 
-# 7 "rampa.c"
+# 5 "rampa.c"
+void rampa_ini13(void){
+rampa_status = 0;
+tiempo_rampa = 0;
+TRISBbits.RB7 = 0;
+INTCON2bits.INTEDG0=0;
+}
+
 void assign_id(unsigned char id){
 slave_id=id;
 }
@@ -6341,43 +6350,40 @@ void RAMPA_tic(void){
 if(tiempo_rampa<9999)tiempo_rampa++;
 }
 
-unsigned char decode(unsigned char buffer){
+unsigned char decode(unsigned char dato_a_decod){
 
-# 17
+# 23
 static unsigned char est_rec=address;
-static char com_rec;
 
+static char com_rec;
 unsigned char retorno;
 
 switch(est_rec){
 case address:{
-if(buffer==slave_id ){
+if(dato_a_decod==slave_id ){
 est_rec++;
-buffer = 0;
+dato_a_decod = 0;
 retorno='p';
-
-
 }
-else if(buffer == broadcast_id){
+else if(dato_a_decod == broadcast_id){
 est_rec++;
-buffer = 0;
+dato_a_decod = 0;
 retorno='b';
-
 }
 }break;
 
 case comando:{
-if(buffer){
-com_rec=buffer;
+if(dato_a_decod){
+com_rec=dato_a_decod;
 est_rec++;
-buffer = 0;
+dato_a_decod = 0;
 retorno=0;
 
 }
 }break;
 
 case fin:{
-if(buffer=='f'){
+if(dato_a_decod=='f'){
 est_rec=address;
 retorno = com_rec;
 com_rec=0;
@@ -6387,15 +6393,20 @@ com_rec=0;
 }
 return retorno;
 }
-void informar(unsigned char seg,unsigned char dec,unsigned char cent,unsigned char mil){
+void informar(char *dato, char longitud){
+char i=0;
+transmitir(slave_id);
+for(i=0;i<longitud;i++) transmitir(*(dato+i)+48);
 
+transmitir('f');
 
 }
-void Transmitir(char Dato){
-TXSTAbits.TXEN = 1;
-while(TRMT);
+void transmitir(char Dato){
+
+while(!TXSTAbits.TRMT);
 TXREG = Dato;
-TXSTAbits.TXEN = 0;
+while(!TXSTAbits.TRMT);
+
 
 }
 

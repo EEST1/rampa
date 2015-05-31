@@ -21,41 +21,38 @@
 #include"Ap_ini.h"      //define nombres para la entradas salidas del
                         //shield
 #include"Lemos.h"       //funciones personalizadas Prof Lemos
-#include"lcd.h"
 #include"rampa.h"
-//#include"Robello.h"     //funciones personalizadas prof Robello
 
-#define start 's'
-#define stop 'd'
-#define lectura 'l'
-#define reset 'r'
+/*Definiciones relacionadas con las operaciones validas*/
+#define start 's'       //inicia la cuenta
+#define stop 'd'        //para la cuenta
+#define lectura 'l'     //transmite la cuenta
+#define reset 'r'       //reinicializa la cuenta pero no para la cuenta
 
 
-unsigned char caracter;
+unsigned char caracter_recibido;            //Almacenaje del la recepción serie
 
 void main(void) {
-    unsigned char backup,seg=0,dec=0,cent=0,mil=0,broadcast_flag=0;
-    unsigned int backup_rampa;
+    unsigned char backup_ultimo_caracter;   //Var auxiliar para la rec serie
+    unsigned int backup_tiempo_rampa;       //Var auxiliar para la cuenta
+    char seg=0,dec=0,cent=0,mil=0; //Var para guardar el BCD
+    char paquete[4];
+    unsigned char broadcast_flag=0;         //
           
     pic_ini13();                    //inicializa las ent/salidas del shield 1.3
-    timer_ini13();                  //inicializa el timer para habilitar
-                                    //el multiplexado de displays
-    timer1_ini13();
-    usart_ini13();
+    timer_ini13();                  //inicializa el timer en 1ms para habilitar
+                                    //el multiplexado de displays y la cuenta
+    timer1_ini13();                 //inicializa el timer 1 para generar 38KHz
+    usart_ini13();                  //inicializa el puerto serie a 9600
     ei();                           //habilitación global de interrupciones
-   // LCD_init();                   //requiere interrupciones de timer
+
     assign_id('a');                 //en caso de tratarse de un esclavo, asigna
                                     //el número enviado a slave_id
-   // msg2LCD("Welcome");
-    rampa_status = OFF;             //global definida en rampa
-    tiempo_rampa = 0;               //global lleva la cuenta en milisegundos
-    TRISBbits.RB7 = 0;              //Salida IR
-    INTCON2bits.INTEDG0=0;          //interrupt in falling edge
+    rampa_ini13();                  //inicialización
 
     while(1){
-        if(caracter != backup){
-  //          char2LCD(caracter);
-            backup=caracter;
+        if(caracter_recibido != backup_ultimo_caracter){
+            backup_ultimo_caracter=caracter_recibido;
 /*decodifico el comando la secuencia correcta es <address> <comando><EOM>
  * address: es el estado que verifica si es solicitado el dispositivo especico
  *          la misma corresponde a un único byte codificado en ASCII
@@ -65,7 +62,7 @@ void main(void) {
  * Si la secuencia es correcta se devuelve el comando**************************
  */
 //****Que hago con el comando************************************************//
-            switch(decode(caracter)){
+            switch(decode(caracter_recibido)){
                 case ninguno:;
                 break;
                 case per2per:{
@@ -79,7 +76,7 @@ void main(void) {
                     LED2=0;
                     rampa_status=ON;
                     INTCONbits.INT0IF=0;
-                    INTCONbits.INT0IE=0;
+                    INTCONbits.INT0IE=1;
                 }break;
                 case stop:{
                     LED1=0;
@@ -90,7 +87,7 @@ void main(void) {
                     if(!broadcast_flag){        //me aseguro que no se escriba
                     LED1=1;
                     LED2=1;
-                    informar(seg,dec,cent,mil);
+                    informar(paquete,4);        //envia la lectura
                     }
                 }break;
                 case reset:{
@@ -100,17 +97,18 @@ void main(void) {
                 }break;
             }
         }  
+/*para no hacer la siguiente conversión a menos que sea necesario se realiza una
+ *comprobación */
+        if(tiempo_rampa !=backup_tiempo_rampa){ //separa la cuenta en BCD
 
-        if(tiempo_rampa !=backup_rampa){
+                paquete[0]=tiempo_rampa/1000;          //obtiene los segundos
+                paquete[1]=(tiempo_rampa%1000)/100;    //obtiene las decimas
+                paquete[2]=(tiempo_rampa%100)/10;     //obtiene la centesimas
+                paquete[3]=tiempo_rampa%10;            //obtiene las milesimas
 
-                seg=tiempo_rampa/1000;
-                dec=(tiempo_rampa%1000)/100;
-                cent=(tiempo_rampa%100)/10;
-                mil=tiempo_rampa%10;
-
-                backup_rampa=tiempo_rampa;
+                backup_tiempo_rampa=tiempo_rampa;
         }
-    Send_4Disp(seg,dec,cent,mil);
+    Send_4Disp(paquete[0],paquete[1],paquete[2],paquete[3]);               //se actualiza la info del disp
     }
 }
 
@@ -138,33 +136,24 @@ void __interrupt myISR(){
 
         #endif
         }
-
-        #ifdef ROBELLO_H
-            if(MEMDIG == 1)
-                mux_display();
-                TMR0IF = 0; //borra el flag de la interrupción de timer
-            return;                     //termina el código de interrupción
-        #endif
 #endif
 #ifdef RAMPA_H
-            if(TMR1IF){
+            if(TMR1IF){                 //Interrupción del TMR1
                 PIR1bits.TMR1IF = 0;
-                TMR1L=144;       //el timer1 contará 157 * 1 * 0.0833us = 13,07us
-                TMR1H=0xFF;     //ese tiempo * 2 = 26.156us para una frec = 38.231
+                TMR1L=144;
+                TMR1H=0xFF;     
                 SAL_IR =~ SAL_IR;
             }
-            if(RCIF){
+            if(RCIF){                   //Interrupción de la recepción
                 RCIF=0;  
-                caracter=RCREG;
+                caracter_recibido=RCREG;
                 (void) RCREG;
             }
-            if(INT0IF){
+            if(INT0IF){                 //Interrupción del INT0
                 rampa_status=OFF;
                 INTCONbits.INT0IE=0;
                 INTCONbits.INT0IF=0;
             }
-
-            
 #endif
 }
 
