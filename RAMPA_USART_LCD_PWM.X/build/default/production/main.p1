@@ -28,34 +28,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S547 . . . . . . ]
 "9209
 [v _INTCONbits `VS547 ~T0 @X0 0 e@4082 ]
-"61 rampa.h
+"62 rampa.h
 [v _assign_id `(v ~T0 @X0 0 ef1`uc ]
-"4182 /opt/microchip/xc8/v1.33/include/pic18f4550.h
-[s S298 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S298 . TRISB0 TRISB1 TRISB2 TRISB3 TRISB4 TRISB5 TRISB6 TRISB7 ]
-"4192
-[s S299 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S299 . RB0 RB1 RB2 RB3 RB4 RB5 RB6 RB7 ]
-"4181
-[u S297 `S298 1 `S299 1 ]
-[n S297 . . . ]
-"4203
-[v _TRISBbits `VS297 ~T0 @X0 0 e@3987 ]
-"9087
-[s S544 :7 `uc 1 :1 `uc 1 ]
-[n S544 . . NOT_RBPU ]
-"9091
-[s S545 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S545 . RBIP . TMR0IP . INTEDG2 INTEDG1 INTEDG0 nRBPU ]
-"9101
-[s S546 :2 `uc 1 :1 `uc 1 :4 `uc 1 :1 `uc 1 ]
-[n S546 . . T0IP . RBPU ]
-"9086
-[u S543 `S544 1 `S545 1 `S546 1 ]
-[n S543 . . . . ]
-"9108
-[v _INTCON2bits `VS543 ~T0 @X0 0 e@4081 ]
-"3746
+"66
+[v _rampa_ini13 `(v ~T0 @X0 0 ef ]
+"3746 /opt/microchip/xc8/v1.33/include/pic18f4550.h
 [s S272 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S272 . LATD0 LATD1 LATD2 LATD3 LATD4 LATD5 LATD6 LATD7 ]
 "3756
@@ -87,9 +64,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S271 . . . . . . . . . . ]
 "3788
 [v _LATDbits `VS271 ~T0 @X0 0 e@3980 ]
-"64 rampa.h
-[v _informar `(v ~T0 @X0 0 ef4`uc`uc`uc`uc ]
-"60
+"65 rampa.h
+[v _informar `(v ~T0 @X0 0 ef2`*uc`uc ]
+"61
 [v _decode `(uc ~T0 @X0 0 ef1`uc ]
 "16 Lemos.h
 [v _Send_4Disp `(v ~T0 @X0 0 ef4`uc`uc`uc`uc ]
@@ -101,9 +78,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _TMR0H `Vuc ~T0 @X0 0 e@4055 ]
 "18 Lemos.h
 [v _tic_timer0 `(v ~T0 @X0 0 ef ]
-"20 lcd.h
-[v _LCD_tic `(v ~T0 @X0 0 ef ]
-"62 rampa.h
+"63 rampa.h
 [v _RAMPA_tic `(v ~T0 @X0 0 ef ]
 "10809 /opt/microchip/xc8/v1.33/include/pic18f4550.h
 [v _TMR1IF `Vb ~T0 @X0 0 e@31984 ]
@@ -5045,58 +5020,57 @@ Version 3.2 HI-TECH Software Intermediate Code
 "22
 [v _led_tout `ui ~T0 @X0 1 e ]
 [; ;Lemos.h: 22: unsigned int led_tout;
-[; ;lcd.h: 14: void LCD_init(void);
-[; ;lcd.h: 15: void msg2LCD(unsigned char*);
-[; ;lcd.h: 16: void char2LCD(unsigned char);
-[; ;lcd.h: 17: void clear_LCD(void);
-[; ;lcd.h: 18: void ret_HOME(void);
-[; ;lcd.h: 19: void set_CURSOR(unsigned char);
-[; ;lcd.h: 20: void LCD_tic(void);
 [; ;rampa.h: 41: enum estados{
 [; ;rampa.h: 42: address,
 [; ;rampa.h: 43: comando,
 [; ;rampa.h: 44: fin,
 [; ;rampa.h: 45: respuesta
 [; ;rampa.h: 47: };
-"51 rampa.h
+"52 rampa.h
 [v _slave_id `uc ~T0 @X0 1 e ]
-[; ;rampa.h: 51: unsigned char slave_id;
-"52
+[; ;rampa.h: 52: unsigned char slave_id;
+"53
 [v _broadcast_id `Cuc ~T0 @X0 1 e ]
 [i _broadcast_id
 -> -> 109 `ui `uc
 ]
-[; ;rampa.h: 52: const unsigned char broadcast_id = 'm';
-"53
-[v _tiempo_rampa `i ~T0 @X0 1 e ]
-[i _tiempo_rampa
--> 0 `i
-]
-[; ;rampa.h: 53: int tiempo_rampa=0;
+[; ;rampa.h: 53: const unsigned char broadcast_id = 'm';
 "54
+[v _tiempo_rampa `ui ~T0 @X0 1 e ]
+[i _tiempo_rampa
+-> -> 0 `i `ui
+]
+[; ;rampa.h: 54: unsigned int tiempo_rampa=0;
+"55
 [v _rampa_status `uc ~T0 @X0 1 e ]
 [i _rampa_status
--> -> 1 `i `uc
+-> -> 0 `i `uc
 ]
-[; ;rampa.h: 54: unsigned char rampa_status=1;
-[; ;rampa.h: 60: unsigned char decode(unsigned char);
-[; ;rampa.h: 61: void assign_id(unsigned char);
-[; ;rampa.h: 62: void RAMPA_tic(void);
-[; ;rampa.h: 63: void Transmitir(char);
-[; ;rampa.h: 64: void informar(unsigned char,unsigned char,unsigned char,unsigned char);
-"34 main.c
-[v _caracter `uc ~T0 @X0 1 e ]
-[; ;main.c: 34: unsigned char caracter;
-"36
+[; ;rampa.h: 55: unsigned char rampa_status=0;
+[; ;rampa.h: 61: unsigned char decode(unsigned char);
+[; ;rampa.h: 62: void assign_id(unsigned char nro_esclavo);
+[; ;rampa.h: 63: void RAMPA_tic(void);
+[; ;rampa.h: 64: void transmitir(char dato);
+[; ;rampa.h: 65: void informar(char *cadena,char longitud);
+[; ;rampa.h: 66: void rampa_ini13(void);
+"33 main.c
+[v _caracter_recibido `uc ~T0 @X0 1 e ]
+[; ;main.c: 33: unsigned char caracter_recibido;
+"35
 [v _main `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 36: void main(void) {
+[; ;main.c: 35: void main(void) {
 [e :U _main ]
 [f ]
+"36
+[v _backup_ultimo_caracter `uc ~T0 @X0 1 a ]
 "37
-[v _backup `uc ~T0 @X0 1 a ]
+[v _backup_tiempo_rampa `ui ~T0 @X0 1 a ]
+"38
 [v _seg `uc ~T0 @X0 1 a ]
-[; ;main.c: 37: unsigned char backup,seg=0,dec=0,cent=0,mil=0,broadcast_flag=0;
+[; ;main.c: 36: unsigned char backup_ultimo_caracter;
+[; ;main.c: 37: unsigned int backup_tiempo_rampa;
+[; ;main.c: 38: char seg=0,dec=0,cent=0,mil=0;
 [e = _seg -> -> 0 `i `uc ]
 [v _dec `uc ~T0 @X0 1 a ]
 [e = _dec -> -> 0 `i `uc ]
@@ -5104,173 +5078,166 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e = _cent -> -> 0 `i `uc ]
 [v _mil `uc ~T0 @X0 1 a ]
 [e = _mil -> -> 0 `i `uc ]
-[v _broadcast_flag `uc ~T0 @X0 1 a ]
-[e = _broadcast_flag -> -> 0 `i `uc ]
-"38
-[v _backup_rampa `ui ~T0 @X0 1 a ]
-[; ;main.c: 38: unsigned int backup_rampa;
-[; ;main.c: 40: pic_ini13();
+"39
+[v _paquete `uc ~T0 @X0 -> 4 `i a ]
 "40
+[v _broadcast_flag `uc ~T0 @X0 1 a ]
+[; ;main.c: 39: char paquete[4];
+[; ;main.c: 40: unsigned char broadcast_flag=0;
+[e = _broadcast_flag -> -> 0 `i `uc ]
+[; ;main.c: 42: pic_ini13();
+"42
 [e ( _pic_ini13 ..  ]
-[; ;main.c: 41: timer_ini13();
-"41
-[e ( _timer_ini13 ..  ]
-[; ;main.c: 43: timer1_ini13();
+[; ;main.c: 43: timer_ini13();
 "43
-[e ( _timer1_ini13 ..  ]
-[; ;main.c: 44: usart_ini13();
-"44
-[e ( _usart_ini13 ..  ]
-[; ;main.c: 45: (INTCONbits.GIE = 1);
+[e ( _timer_ini13 ..  ]
+[; ;main.c: 45: timer1_ini13();
 "45
-[e = . . _INTCONbits 1 7 -> -> 1 `i `uc ]
-[; ;main.c: 47: assign_id('a');
+[e ( _timer1_ini13 ..  ]
+[; ;main.c: 46: usart_ini13();
+"46
+[e ( _usart_ini13 ..  ]
+[; ;main.c: 47: (INTCONbits.GIE = 1);
 "47
+[e = . . _INTCONbits 1 7 -> -> 1 `i `uc ]
+[; ;main.c: 49: assign_id('a');
+"49
 [e ( _assign_id (1 -> -> 97 `ui `uc ]
-[; ;main.c: 50: rampa_status = 0;
-"50
-[e = _rampa_status -> -> 0 `i `uc ]
-[; ;main.c: 51: tiempo_rampa = 0;
+[; ;main.c: 51: rampa_ini13();
 "51
-[e = _tiempo_rampa -> 0 `i ]
-[; ;main.c: 52: TRISBbits.RB7 = 0;
-"52
-[e = . . _TRISBbits 1 7 -> -> 0 `i `uc ]
-[; ;main.c: 53: INTCON2bits.INTEDG0=0;
+[e ( _rampa_ini13 ..  ]
+[; ;main.c: 53: while(1){
 "53
-[e = . . _INTCON2bits 1 6 -> -> 0 `i `uc ]
-[; ;main.c: 55: while(1){
-"55
 [e :U 595 ]
 {
-[; ;main.c: 56: if(caracter != backup){
-"56
-[e $ ! != -> _caracter `i -> _backup `i 597  ]
+[; ;main.c: 54: if(caracter_recibido != backup_ultimo_caracter){
+"54
+[e $ ! != -> _caracter_recibido `i -> _backup_ultimo_caracter `i 597  ]
 {
-[; ;main.c: 58: backup=caracter;
-"58
-[e = _backup _caracter ]
-[; ;main.c: 68: switch(decode(caracter)){
-"68
+[; ;main.c: 55: backup_ultimo_caracter=caracter_recibido;
+"55
+[e = _backup_ultimo_caracter _caracter_recibido ]
+[; ;main.c: 65: switch(decode(caracter_recibido)){
+"65
 [e $U 599  ]
 {
-[; ;main.c: 69: case 0:;
-"69
+[; ;main.c: 66: case 0:;
+"66
 [e :U 600 ]
-[; ;main.c: 70: break;
-"70
+[; ;main.c: 67: break;
+"67
 [e $U 598  ]
-[; ;main.c: 71: case 'p':{
-"71
+[; ;main.c: 68: case 'p':{
+"68
 [e :U 601 ]
 {
-[; ;main.c: 72: broadcast_flag=0;
-"72
+[; ;main.c: 69: broadcast_flag=0;
+"69
 [e = _broadcast_flag -> -> 0 `i `uc ]
+"70
+}
+[; ;main.c: 70: }break;
+[e $U 598  ]
+[; ;main.c: 71: case 'b':{
+"71
+[e :U 602 ]
+{
+[; ;main.c: 72: broadcast_flag=1;
+"72
+[e = _broadcast_flag -> -> 1 `i `uc ]
 "73
 }
 [; ;main.c: 73: }break;
 [e $U 598  ]
-[; ;main.c: 74: case 'b':{
+[; ;main.c: 74: case 's':{
 "74
-[e :U 602 ]
-{
-[; ;main.c: 75: broadcast_flag=1;
-"75
-[e = _broadcast_flag -> -> 1 `i `uc ]
-"76
-}
-[; ;main.c: 76: }break;
-[e $U 598  ]
-[; ;main.c: 77: case 's':{
-"77
 [e :U 603 ]
 {
-[; ;main.c: 78: LATDbits.LD2=1;
-"78
+[; ;main.c: 75: LATDbits.LD2=1;
+"75
 [e = . . _LATDbits 3 1 -> -> 1 `i `uc ]
-[; ;main.c: 79: LATDbits.LD3=0;
-"79
+[; ;main.c: 76: LATDbits.LD3=0;
+"76
 [e = . . _LATDbits 4 1 -> -> 0 `i `uc ]
-[; ;main.c: 80: rampa_status=1;
-"80
+[; ;main.c: 77: rampa_status=1;
+"77
 [e = _rampa_status -> -> 1 `i `uc ]
-[; ;main.c: 81: INTCONbits.INT0IF=0;
-"81
+[; ;main.c: 78: INTCONbits.INT0IF=0;
+"78
 [e = . . _INTCONbits 0 1 -> -> 0 `i `uc ]
-[; ;main.c: 82: INTCONbits.INT0IE=0;
-"82
-[e = . . _INTCONbits 0 4 -> -> 0 `i `uc ]
-"83
+[; ;main.c: 79: INTCONbits.INT0IE=1;
+"79
+[e = . . _INTCONbits 0 4 -> -> 1 `i `uc ]
+"80
 }
-[; ;main.c: 83: }break;
+[; ;main.c: 80: }break;
 [e $U 598  ]
-[; ;main.c: 84: case 'd':{
-"84
+[; ;main.c: 81: case 'd':{
+"81
 [e :U 604 ]
 {
-[; ;main.c: 85: LATDbits.LD2=0;
-"85
+[; ;main.c: 82: LATDbits.LD2=0;
+"82
 [e = . . _LATDbits 3 1 -> -> 0 `i `uc ]
-[; ;main.c: 86: LATDbits.LD3=1;
-"86
+[; ;main.c: 83: LATDbits.LD3=1;
+"83
 [e = . . _LATDbits 4 1 -> -> 1 `i `uc ]
-[; ;main.c: 87: rampa_status=0;
-"87
+[; ;main.c: 84: rampa_status=0;
+"84
 [e = _rampa_status -> -> 0 `i `uc ]
-"88
+"85
 }
-[; ;main.c: 88: }break;
+[; ;main.c: 85: }break;
 [e $U 598  ]
-[; ;main.c: 89: case 'l':{
-"89
+[; ;main.c: 86: case 'l':{
+"86
 [e :U 605 ]
 {
-[; ;main.c: 90: if(!broadcast_flag){
-"90
+[; ;main.c: 87: if(!broadcast_flag){
+"87
 [e $ ! ! != -> _broadcast_flag `i -> -> -> 0 `i `uc `i 606  ]
 {
-[; ;main.c: 91: LATDbits.LD2=1;
-"91
+[; ;main.c: 88: LATDbits.LD2=1;
+"88
 [e = . . _LATDbits 3 1 -> -> 1 `i `uc ]
-[; ;main.c: 92: LATDbits.LD3=1;
-"92
+[; ;main.c: 89: LATDbits.LD3=1;
+"89
 [e = . . _LATDbits 4 1 -> -> 1 `i `uc ]
-[; ;main.c: 93: informar(seg,dec,cent,mil);
-"93
-[e ( _informar (4 , , , _seg _dec _cent _mil ]
-"94
+[; ;main.c: 90: informar(paquete,4);
+"90
+[e ( _informar (2 , &U _paquete -> -> 4 `i `uc ]
+"91
 }
 [e :U 606 ]
-"95
+"92
 }
-[; ;main.c: 94: }
-[; ;main.c: 95: }break;
+[; ;main.c: 91: }
+[; ;main.c: 92: }break;
 [e $U 598  ]
-[; ;main.c: 96: case 'r':{
-"96
+[; ;main.c: 93: case 'r':{
+"93
 [e :U 607 ]
 {
-[; ;main.c: 97: LATDbits.LD2=0;
-"97
+[; ;main.c: 94: LATDbits.LD2=0;
+"94
 [e = . . _LATDbits 3 1 -> -> 0 `i `uc ]
-[; ;main.c: 98: LATDbits.LD3=0;
-"98
+[; ;main.c: 95: LATDbits.LD3=0;
+"95
 [e = . . _LATDbits 4 1 -> -> 0 `i `uc ]
-[; ;main.c: 99: tiempo_rampa=0;
-"99
-[e = _tiempo_rampa -> 0 `i ]
-"100
+[; ;main.c: 96: tiempo_rampa=0;
+"96
+[e = _tiempo_rampa -> -> 0 `i `ui ]
+"97
 }
-[; ;main.c: 100: }break;
+[; ;main.c: 97: }break;
 [e $U 598  ]
-"101
+"98
 }
-[; ;main.c: 101: }
+[; ;main.c: 98: }
 [e $U 598  ]
-"68
+"65
 [e :U 599 ]
-[e [\ ( _decode (1 _caracter , $ -> -> 0 `i `uc 600
+[e [\ ( _decode (1 _caracter_recibido , $ -> -> 0 `i `uc 600
  , $ -> -> 112 `ui `uc 601
  , $ -> -> 98 `ui `uc 602
  , $ -> -> 115 `ui `uc 603
@@ -5278,139 +5245,136 @@ Version 3.2 HI-TECH Software Intermediate Code
  , $ -> -> 108 `ui `uc 605
  , $ -> -> 114 `ui `uc 607
  598 ]
-"101
+"98
 [e :U 598 ]
-"102
+"99
 }
 [e :U 597 ]
-[; ;main.c: 102: }
-[; ;main.c: 104: if(tiempo_rampa !=backup_rampa){
-"104
-[e $ ! != -> _tiempo_rampa `ui _backup_rampa 608  ]
+[; ;main.c: 99: }
+[; ;main.c: 102: if(tiempo_rampa !=backup_tiempo_rampa){
+"102
+[e $ ! != _tiempo_rampa _backup_tiempo_rampa 608  ]
 {
-[; ;main.c: 106: seg=tiempo_rampa/1000;
+[; ;main.c: 104: paquete[0]=tiempo_rampa/1000;
+"104
+[e = *U + &U _paquete * -> -> -> 0 `i `ui `ux -> -> # *U &U _paquete `ui `ux -> / _tiempo_rampa -> -> 1000 `i `ui `uc ]
+[; ;main.c: 105: paquete[1]=(tiempo_rampa%1000)/100;
+"105
+[e = *U + &U _paquete * -> -> -> 1 `i `ui `ux -> -> # *U &U _paquete `ui `ux -> / % _tiempo_rampa -> -> 1000 `i `ui -> -> 100 `i `ui `uc ]
+[; ;main.c: 106: paquete[2]=(tiempo_rampa%100)/10;
 "106
-[e = _seg -> / _tiempo_rampa -> 1000 `i `uc ]
-[; ;main.c: 107: dec=(tiempo_rampa%1000)/100;
+[e = *U + &U _paquete * -> -> -> 2 `i `ui `ux -> -> # *U &U _paquete `ui `ux -> / % _tiempo_rampa -> -> 100 `i `ui -> -> 10 `i `ui `uc ]
+[; ;main.c: 107: paquete[3]=tiempo_rampa%10;
 "107
-[e = _dec -> / % _tiempo_rampa -> 1000 `i -> 100 `i `uc ]
-[; ;main.c: 108: cent=(tiempo_rampa%100)/10;
-"108
-[e = _cent -> / % _tiempo_rampa -> 100 `i -> 10 `i `uc ]
-[; ;main.c: 109: mil=tiempo_rampa%10;
+[e = *U + &U _paquete * -> -> -> 3 `i `ui `ux -> -> # *U &U _paquete `ui `ux -> % _tiempo_rampa -> -> 10 `i `ui `uc ]
+[; ;main.c: 109: backup_tiempo_rampa=tiempo_rampa;
 "109
-[e = _mil -> % _tiempo_rampa -> 10 `i `uc ]
-[; ;main.c: 111: backup_rampa=tiempo_rampa;
-"111
-[e = _backup_rampa -> _tiempo_rampa `ui ]
-"112
+[e = _backup_tiempo_rampa _tiempo_rampa ]
+"110
 }
 [e :U 608 ]
-[; ;main.c: 112: }
-[; ;main.c: 113: Send_4Disp(seg,dec,cent,mil);
-"113
-[e ( _Send_4Disp (4 , , , _seg _dec _cent _mil ]
-"114
+[; ;main.c: 110: }
+[; ;main.c: 111: Send_4Disp(paquete[0],paquete[1],paquete[2],paquete[3]);
+"111
+[e ( _Send_4Disp (4 , , , *U + &U _paquete * -> -> -> 0 `i `ui `ux -> -> # *U &U _paquete `ui `ux *U + &U _paquete * -> -> -> 1 `i `ui `ux -> -> # *U &U _paquete `ui `ux *U + &U _paquete * -> -> -> 2 `i `ui `ux -> -> # *U &U _paquete `ui `ux *U + &U _paquete * -> -> -> 3 `i `ui `ux -> -> # *U &U _paquete `ui `ux ]
+"112
 }
 [e :U 594 ]
-"55
+"53
 [e $U 595  ]
 [e :U 596 ]
-[; ;main.c: 114: }
-[; ;main.c: 115: }
-"115
+[; ;main.c: 112: }
+[; ;main.c: 113: }
+"113
 [e :UE 593 ]
 }
-[v F5330 `(v ~T0 @X0 1 tf ]
-"117
-[v _myISR `IF5330 ~T0 @X0 1 e ]
+[v F5317 `(v ~T0 @X0 1 tf ]
+"115
+[v _myISR `IF5317 ~T0 @X0 1 e ]
 {
-[; ;main.c: 117: void __interrupt myISR(){
+[; ;main.c: 115: void __interrupt myISR(){
 [e :U _myISR ]
 [f ]
-[; ;main.c: 126: if(TMR0IF){
-"126
+[; ;main.c: 124: if(TMR0IF){
+"124
 [e $ ! _TMR0IF 610  ]
 {
-[; ;main.c: 127: INTCONbits.TMR0IF = 0;
-"127
+[; ;main.c: 125: INTCONbits.TMR0IF = 0;
+"125
 [e = . . _INTCONbits 0 2 -> -> 0 `i `uc ]
-[; ;main.c: 128: TMR0L = 209;
-"128
+[; ;main.c: 126: TMR0L = 209;
+"126
 [e = _TMR0L -> -> 209 `i `uc ]
-[; ;main.c: 129: TMR0H = 0xFF;
-"129
+[; ;main.c: 127: TMR0H = 0xFF;
+"127
 [e = _TMR0H -> -> 255 `i `uc ]
-[; ;main.c: 131: tic_timer0();
-"131
+[; ;main.c: 129: tic_timer0();
+"129
 [e ( _tic_timer0 ..  ]
-[; ;main.c: 134: LCD_tic();
-"134
-[e ( _LCD_tic ..  ]
-[; ;main.c: 137: if(rampa_status) RAMPA_tic();
-"137
+[; ;main.c: 135: if(rampa_status) RAMPA_tic();
+"135
 [e $ ! != -> _rampa_status `i -> -> -> 0 `i `uc `i 611  ]
 [e ( _RAMPA_tic ..  ]
 [e :U 611 ]
-"140
+"138
 }
 [e :U 610 ]
-[; ;main.c: 140: }
-[; ;main.c: 150: if(TMR1IF){
-"150
+[; ;main.c: 138: }
+[; ;main.c: 141: if(TMR1IF){
+"141
 [e $ ! _TMR1IF 612  ]
 {
-[; ;main.c: 151: PIR1bits.TMR1IF = 0;
-"151
+[; ;main.c: 142: PIR1bits.TMR1IF = 0;
+"142
 [e = . . _PIR1bits 0 0 -> -> 0 `i `uc ]
-[; ;main.c: 152: TMR1L=144;
-"152
+[; ;main.c: 143: TMR1L=144;
+"143
 [e = _TMR1L -> -> 144 `i `uc ]
-[; ;main.c: 153: TMR1H=0xFF;
-"153
+[; ;main.c: 144: TMR1H=0xFF;
+"144
 [e = _TMR1H -> -> 255 `i `uc ]
-[; ;main.c: 154: LATBbits.LATB7 =~ LATBbits.LATB7;
-"154
+[; ;main.c: 145: LATBbits.LATB7 =~ LATBbits.LATB7;
+"145
 [e = . . _LATBbits 0 7 -> ~ -> . . _LATBbits 0 7 `i `uc ]
-"155
+"146
 }
 [e :U 612 ]
-[; ;main.c: 155: }
-[; ;main.c: 156: if(RCIF){
-"156
+[; ;main.c: 146: }
+[; ;main.c: 147: if(RCIF){
+"147
 [e $ ! _RCIF 613  ]
 {
-[; ;main.c: 157: RCIF=0;
-"157
+[; ;main.c: 148: RCIF=0;
+"148
 [e = _RCIF -> -> 0 `i `b ]
-[; ;main.c: 158: caracter=RCREG;
-"158
-[e = _caracter _RCREG ]
-[; ;main.c: 159: (void) RCREG;
-"159
+[; ;main.c: 149: caracter_recibido=RCREG;
+"149
+[e = _caracter_recibido _RCREG ]
+[; ;main.c: 150: (void) RCREG;
+"150
 [e _RCREG ]
-"160
+"151
 }
 [e :U 613 ]
-[; ;main.c: 160: }
-[; ;main.c: 161: if(INT0IF){
-"161
+[; ;main.c: 151: }
+[; ;main.c: 152: if(INT0IF){
+"152
 [e $ ! _INT0IF 614  ]
 {
-[; ;main.c: 162: rampa_status=0;
-"162
+[; ;main.c: 153: rampa_status=0;
+"153
 [e = _rampa_status -> -> 0 `i `uc ]
-[; ;main.c: 163: INTCONbits.INT0IE=0;
-"163
+[; ;main.c: 154: INTCONbits.INT0IE=0;
+"154
 [e = . . _INTCONbits 0 4 -> -> 0 `i `uc ]
-[; ;main.c: 164: INTCONbits.INT0IF=0;
-"164
+[; ;main.c: 155: INTCONbits.INT0IF=0;
+"155
 [e = . . _INTCONbits 0 1 -> -> 0 `i `uc ]
-"165
+"156
 }
 [e :U 614 ]
-[; ;main.c: 165: }
-[; ;main.c: 169: }
-"169
+[; ;main.c: 156: }
+[; ;main.c: 158: }
+"158
 [e :UE 609 ]
 }

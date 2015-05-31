@@ -5259,9 +5259,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;Ap_ini.c: 90: TXSTAbits.TX9 = 0;
 "90
 [e = . . _TXSTAbits 0 6 -> -> 0 `i `uc ]
-[; ;Ap_ini.c: 91: TXSTAbits.TXEN = 0;
+[; ;Ap_ini.c: 91: TXSTAbits.TXEN = 1;
 "91
-[e = . . _TXSTAbits 0 5 -> -> 0 `i `uc ]
+[e = . . _TXSTAbits 0 5 -> -> 1 `i `uc ]
 [; ;Ap_ini.c: 94: (void) RCREG;
 "94
 [e _RCREG ]
