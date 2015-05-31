@@ -1,5 +1,5 @@
 
-# 1 "Lemos.C"
+# 1 "lcd.c"
 
 # 21 "/opt/microchip/xc8/v1.33/include/htc.h"
 extern const char __xc8_OPTIM_SPEED;
@@ -6302,137 +6302,150 @@ extern __nonreentrant void _delaywdt(unsigned long);
 #pragma intrinsic(_delay3)
 extern __nonreentrant void _delay3(unsigned char);
 
-# 40 "Ap_ini.h"
-void pic_ini13(void);
-void timer_ini13(void);
-void timer1_ini13();
-void pwm_ini13(void);
-void usart_ini13 (void);
-void pwm_set(unsigned char periodo, unsigned char duty );
+# 14 "lcd.h"
+void LCD_init(void);
+void msg2LCD(unsigned char*);
+void char2LCD(unsigned char);
+void clear_LCD(void);
+void ret_HOME(void);
+void set_CURSOR(unsigned char);
+void LCD_tic(void);
 
-# 15 "Lemos.h"
-void Send_Disp(unsigned char NroDisp,unsigned char Dato);
-void Send_4Disp(unsigned char Umil,unsigned char Cent,unsigned char Dec,unsigned char Uni);
-void leds(unsigned int velocidad);
-void tic_timer0(void);
+# 15 "lcd.c"
+unsigned short LCD_tout;
 
-
-unsigned char mux_tout,bot_tout;
-unsigned int led_tout;
-
-# 8 "Lemos.C"
-void leds(unsigned int velocidad){
-static unsigned char i=1;
+void write_DATA(unsigned char dato);
+void write_CMD(unsigned char dato);
+void write_LCD (unsigned char dato);
+void read_BUSY(void);
 
 
-switch(i){
-case 1:if(!led_tout){
-LATDbits.LD2=~LATDbits.LD2;
-led_tout = velocidad;
-i++;
-}
-break;
-case 2:if(!led_tout){
-LATDbits.LD3=~LATDbits.LD3;
-led_tout = velocidad;
-i++;
-}
-break;
-case 3:if(!led_tout){
-LATCbits.LC6=~LATCbits.LC6;
-led_tout = velocidad;
-i++;
-}
-break;
-case 4:if(!led_tout){
-LATCbits.LC7=~LATCbits.LC7;
-led_tout = velocidad;
-i=1;
-}
-break;
-default : {
-led_tout = 1000;
-i=1;
-}
-}
-}
-void Send_Disp(unsigned char NroDisp,unsigned char Dato){
 
-LATA = 0;
+void msg2LCD(char *datos){
 
-LATAbits.LA4 = 0;
-LATAbits.LA5 = 0;
-LATEbits.LATE0 = 0;
-LATEbits.LATE1 = 0;
-
-switch(NroDisp){
-case 1:{
-LATAbits.LA4 = 1;
-}break;
-case 2: {
-LATAbits.LA5 = 1;
-}break;
-case 3: {
-LATEbits.LATE0 = 1;
-}break;
-case 4: {
-LATEbits.LATE1 = 1;
-}break;
-default :{
-LATAbits.LA4 = 1;
-}break;
+while (*datos != 0){
+write_DATA(*datos);
+read_BUSY();
+datos++;
 }
-Dato = Dato & 0x0F;
-LATA = LATA & 0xF0;
-LATA = LATA | Dato;
 }
 
-void Send_4Disp(unsigned char Umil,unsigned char Cent,unsigned char Dec,unsigned char Uni){
 
-static unsigned char Nro_Disp=1;
+void char2LCD(unsigned char dato){
 
-switch(Nro_Disp){
-case 1:{
-if(!mux_tout){
-Send_Disp(1,Umil);
-mux_tout = 4;;
-Nro_Disp = 2;
-}
-}
-break;
-case 2:{
-if(!mux_tout){
-Send_Disp(2,Cent);
-mux_tout = 4;;
-Nro_Disp = 3;
-}
-}
-break;
-case 3:{
-if(!mux_tout){
-Send_Disp(3,Dec);
-mux_tout = 4;;
-Nro_Disp = 4;
-}
-}
-break;
-case 4:{
-if(!mux_tout){
-Send_Disp(4,Uni);
-mux_tout = 4;;
-Nro_Disp = 1;
-}
-}
-break;
-default :{
-mux_tout = 4;;
-Nro_Disp = 1;
-}
-}
-}
-void tic_timer0(void){
-if(mux_tout)mux_tout--;
-if(bot_tout)bot_tout--;
-if(led_tout)led_tout--;
+write_DATA(dato);
+read_BUSY();
 }
 
+
+void clear_LCD(void){
+write_CMD(0x01);
+read_BUSY();
+}
+
+
+void ret_HOME(void){
+write_CMD(0x02);
+read_BUSY();
+}
+
+
+void set_CURSOR(unsigned char posi){
+posi |= 0x80;
+write_CMD(posi);
+read_BUSY();
+}
+
+
+void LCD_init(void){
+TRISB = 0b00010000;
+
+LCD_tout = 30;
+while (LCD_tout);
+
+write_CMD(0x02);
+LCD_tout = 1;
+while (LCD_tout);
+
+write_CMD(0x28);
+LCD_tout = 1;
+while (LCD_tout);
+
+write_CMD(0x0C);
+LCD_tout = 1;
+while (LCD_tout);
+
+write_CMD(0x01);
+LCD_tout = 1;
+while (LCD_tout);
+
+write_CMD(0x06);
+LCD_tout = 1;
+while (LCD_tout);
+
+read_BUSY();
+
+}
+
+void write_DATA(unsigned char dato){
+
+LATBbits.LB7 = 0x1;
+LATBbits.LB6 = 0x0;
+write_LCD(dato);
+
+}
+
+
+void write_CMD(unsigned char dato){
+
+LATBbits.LB7 = 0x0;
+LATBbits.LB6 = 0x0;
+write_LCD(dato);
+
+}
+
+
+void write_LCD (unsigned char dato){
+unsigned char aux;
+
+LATB &= 0xF0;
+LATBbits.LB5 = 0x1;
+
+aux = dato>>4;
+LATB |= aux;
+
+LATBbits.LB5 = 0x0;
+
+LATB &= 0xF0;
+LATBbits.LB5 = 0x1;
+
+aux = dato & 0x0F;
+LATB |= aux;
+
+LATBbits.LB5 = 0x0;
+}
+
+
+void read_BUSY(void){
+
+unsigned char aux;
+
+TRISB |= 0x0F;
+LATBbits.LB7 = 0x0;
+LATBbits.LB6 = 0x1;
+do{
+LATBbits.LB5 = 0x1;
+aux = PORTBbits.RB3;
+LATBbits.LB5 = 0x0;
+LATBbits.LB5 = 0x1;
+(void)PORTBbits.RB3;
+LATBbits.LB5 = 0x0;
+}while (aux);
+LATBbits.LB6 = 0x0;
+TRISB &= 0xF0;
+}
+
+
+void LCD_tic(void){
+if (LCD_tout) LCD_tout--;
+}

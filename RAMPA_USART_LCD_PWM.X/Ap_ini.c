@@ -42,11 +42,21 @@ void timer_ini13(){
     T0CONbits.T0PS0 = 1;    //cargo el preescaler con 256
     T0CONbits.T0PS1 = 1;
     T0CONbits.T0PS2 = 1;
-    TMR0L = 209;           //el timer contará 47 fosc/4 * 256 = 12032 * 0,0833us
+    TMR0L = 209;            //el timer contará 47 fosc/4 * 256 = 12032 * 0,083us
     TMR0H = 0xFF;           //en total aprox 1.0022ms  casi 1ms
     INTCONbits.TMR0IE = 1;  //Habilita la interrupción de timer 0
-    T0CONbits.TMR0ON = 1;           //enciendo el time0
+    T0CONbits.TMR0ON = 1;   //enciendo el time0
 
+}
+void timer1_ini13(){
+
+    T1CONbits.T1CKPS0=0;    //configuro el preescaler
+    T1CONbits.T1CKPS1=0;
+    TMR1L=145;               //el timer1 contará 157 * 1 * 0.0833us = 13,07us
+    TMR1H=0xFF;             //ese tiempo * 2 = 26.156us para una frec = 38.231
+    PIR1bits.TMR1IF=0;
+    PIE1bits.TMR1IE=1;      //habilita la interrupción del timer 1
+    T1CONbits.TMR1ON = 1;   //enciendo el timer1
 }
 void pwm_ini13(void){
     PR2=0x00;               //PWM_Perior=[PR2+1]*4*Tosc*(TMR2 Preescaler)

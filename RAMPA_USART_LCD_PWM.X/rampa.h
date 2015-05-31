@@ -23,18 +23,22 @@ extern "C" {
 
 
 //variables
-#define EOM 'f'        //fin de mensaje
+#define EOM 'f'                     //fin de mensaje
+#define broadcast 'b'               //indicador de broadcast
+#define per2per 'p'                 //indicador de direccionamiento unico
 
 #define ninguno 0
 #define OFF 0
 #define ON 1
 
+#define SAL_IR LATBbits.LATB7
 
 
 
 
 
-enum estados{                        //los estados posibles
+
+enum estados{                       //los estados posibles
     address,
     comando,
     fin,
@@ -45,7 +49,7 @@ enum estados{                        //los estados posibles
 
 
 unsigned char slave_id;     //fija el id
-const unsigned char broadcast_id = 0xAA;
+const unsigned char broadcast_id = 'm';
 int tiempo_rampa=0;
 unsigned char rampa_status=ON;
 
@@ -57,3 +61,4 @@ unsigned char decode(unsigned char);    //decodifica el paquete
 void assign_id(unsigned char);          //inicializa el id del esclavo
 void RAMPA_tic(void);
 void Transmitir(char);
+void informar(unsigned char,unsigned char,unsigned char,unsigned char);

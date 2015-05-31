@@ -16,16 +16,24 @@ unsigned char decode(unsigned char buffer){
  * paquete los mismos estarán compuestos por |address|-|comando|-|fin| */
     static unsigned char est_rec=address;
     static char com_rec;      //el ultimo comando recivido
+
     unsigned char retorno;
 
     switch(est_rec){
         case address:{
-            if(buffer==slave_id || buffer==broadcast_id){
+            if(buffer==slave_id ){
                 est_rec++;
                 buffer = 0;
-                retorno=ninguno;
+                retorno=per2per;
+
               
                 }
+            else if(buffer == broadcast_id){
+                est_rec++;
+                buffer = 0;
+                retorno=broadcast;
+
+            }
         }break;
 
         case comando:{
@@ -43,10 +51,15 @@ unsigned char decode(unsigned char buffer){
                 est_rec=address;
                 retorno = com_rec;
                 com_rec=ninguno;
+
             }
         }break;
     }
     return retorno;
+}
+void informar(unsigned char seg,unsigned char dec,unsigned char cent,unsigned char mil){
+
+
 }
 void Transmitir(char Dato){
     TXSTAbits.TXEN = ON;

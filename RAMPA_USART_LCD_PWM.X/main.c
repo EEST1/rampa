@@ -30,23 +30,27 @@
 #define lectura 'l'
 #define reset 'r'
 
+
 unsigned char caracter;
 
 void main(void) {
-    unsigned char backup,seg=0,dec=0,cent=0,mil=0;
+    unsigned char backup,seg=0,dec=0,cent=0,mil=0,broadcast_flag=0;
     unsigned int backup_rampa;
           
     pic_ini13();                    //inicializa las ent/salidas del shield 1.3
     timer_ini13();                  //inicializa el timer para habilitar
                                     //el multiplexado de displays
+    timer1_ini13();
     usart_ini13();
     ei();                           //habilitación global de interrupciones
-   // LCD_init();                     //requiere interrupciones de timer
+   // LCD_init();                   //requiere interrupciones de timer
     assign_id('a');                 //en caso de tratarse de un esclavo, asigna
                                     //el número enviado a slave_id
-  //  msg2LCD("Welcome");
-    rampa_status=OFF;               //global definida en rampa
-    tiempo_rampa=0;                 //global lleva la cuenta en milisegundos
+   // msg2LCD("Welcome");
+    rampa_status = OFF;             //global definida en rampa
+    tiempo_rampa = 0;               //global lleva la cuenta en milisegundos
+    TRISBbits.RB7 = 0;              //Salida IR
+    INTCON2bits.INTEDG0=0;          //interrupt in falling edge
 
     while(1){
         if(caracter != backup){
@@ -64,10 +68,18 @@ void main(void) {
             switch(decode(caracter)){
                 case ninguno:;
                 break;
+                case per2per:{
+                    broadcast_flag=OFF;
+                }break;
+                case broadcast:{
+                    broadcast_flag=ON;
+                }break;
                 case start:{
                     LED1=1;
                     LED2=0;
                     rampa_status=ON;
+                    INTCONbits.INT0IF=0;
+                    INTCONbits.INT0IE=0;
                 }break;
                 case stop:{
                     LED1=0;
@@ -75,8 +87,11 @@ void main(void) {
                     rampa_status=OFF;
                 }break;
                 case lectura:{
+                    if(!broadcast_flag){        //me aseguro que no se escriba
                     LED1=1;
                     LED2=1;
+                    informar(seg,dec,cent,mil);
+                    }
                 }break;
                 case reset:{
                     LED1=0;
@@ -85,11 +100,14 @@ void main(void) {
                 }break;
             }
         }  
+
         if(tiempo_rampa !=backup_rampa){
+
                 seg=tiempo_rampa/1000;
                 dec=(tiempo_rampa%1000)/100;
                 cent=(tiempo_rampa%100)/10;
                 mil=tiempo_rampa%10;
+
                 backup_rampa=tiempo_rampa;
         }
     Send_4Disp(seg,dec,cent,mil);
@@ -117,8 +135,10 @@ void __interrupt myISR(){
         #endif
         #ifdef RAMPA_H
            if(rampa_status) RAMPA_tic();
+
         #endif
         }
+
         #ifdef ROBELLO_H
             if(MEMDIG == 1)
                 mux_display();
@@ -127,11 +147,25 @@ void __interrupt myISR(){
         #endif
 #endif
 #ifdef RAMPA_H
+            if(TMR1IF){
+                PIR1bits.TMR1IF = 0;
+                TMR1L=144;       //el timer1 contará 157 * 1 * 0.0833us = 13,07us
+                TMR1H=0xFF;     //ese tiempo * 2 = 26.156us para una frec = 38.231
+                SAL_IR =~ SAL_IR;
+            }
             if(RCIF){
                 RCIF=0;  
                 caracter=RCREG;
                 (void) RCREG;
             }
+            if(INT0IF){
+                rampa_status=OFF;
+                INTCONbits.INT0IE=0;
+                INTCONbits.INT0IF=0;
+            }
+
+            
 #endif
 }
+
 

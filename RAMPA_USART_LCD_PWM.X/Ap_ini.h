@@ -39,6 +39,7 @@ extern "C" {
 
 void pic_ini13(void);
 void timer_ini13(void);
+void timer1_ini13();
 void pwm_ini13(void);
 void usart_ini13 (void);
 void pwm_set(unsigned char periodo, unsigned char duty );
