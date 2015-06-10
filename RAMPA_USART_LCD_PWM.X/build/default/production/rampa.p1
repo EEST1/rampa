@@ -27,9 +27,41 @@ Version 3.2 HI-TECH Software Intermediate Code
 "23 rampa.c
 [c E5256 0 1 2 3 .. ]
 [n E5256 estados address comando fin respuesta  ]
-"64 rampa.h
+"66 rampa.h
 [v _transmitir `(v ~T0 @X0 0 ef1`uc ]
-"5720 /opt/microchip/xc8/v1.33/include/pic18f4550.h
+"3746 /opt/microchip/xc8/v1.33/include/pic18f4550.h
+[s S272 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S272 . LATD0 LATD1 LATD2 LATD3 LATD4 LATD5 LATD6 LATD7 ]
+"3756
+[s S273 :1 `uc 1 ]
+[n S273 . LD0 ]
+"3759
+[s S274 :1 `uc 1 :1 `uc 1 ]
+[n S274 . . LD1 ]
+"3763
+[s S275 :2 `uc 1 :1 `uc 1 ]
+[n S275 . . LD2 ]
+"3767
+[s S276 :3 `uc 1 :1 `uc 1 ]
+[n S276 . . LD3 ]
+"3771
+[s S277 :4 `uc 1 :1 `uc 1 ]
+[n S277 . . LD4 ]
+"3775
+[s S278 :5 `uc 1 :1 `uc 1 ]
+[n S278 . . LD5 ]
+"3779
+[s S279 :6 `uc 1 :1 `uc 1 ]
+[n S279 . . LD6 ]
+"3783
+[s S280 :7 `uc 1 :1 `uc 1 ]
+[n S280 . . LD7 ]
+"3745
+[u S271 `S272 1 `S273 1 `S274 1 `S275 1 `S276 1 `S277 1 `S278 1 `S279 1 `S280 1 ]
+[n S271 . . . . . . . . . . ]
+"3788
+[v _LATDbits `VS271 ~T0 @X0 0 e@3980 ]
+"5720
 [s S368 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S368 . TX9D TRMT BRGH SENDB SYNC TXEN TX9 CSRC ]
 "5730
@@ -4875,39 +4907,39 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic18.h: 147: extern __nonreentrant void _delay(unsigned long);
 [; ;pic18.h: 149: extern __nonreentrant void _delaywdt(unsigned long);
 [; ;pic18.h: 151: extern __nonreentrant void _delay3(unsigned char);
-[; ;rampa.h: 41: enum estados{
-[; ;rampa.h: 42: address,
-[; ;rampa.h: 43: comando,
-[; ;rampa.h: 44: fin,
-[; ;rampa.h: 45: respuesta
-[; ;rampa.h: 47: };
-"52 rampa.h
+[; ;rampa.h: 43: enum estados{
+[; ;rampa.h: 44: address,
+[; ;rampa.h: 45: comando,
+[; ;rampa.h: 46: fin,
+[; ;rampa.h: 47: respuesta
+[; ;rampa.h: 49: };
+"54 rampa.h
 [v _slave_id `uc ~T0 @X0 1 e ]
-[; ;rampa.h: 52: unsigned char slave_id;
-"53
+[; ;rampa.h: 54: unsigned char slave_id;
+"55
 [v _broadcast_id `Cuc ~T0 @X0 1 e ]
 [i _broadcast_id
 -> -> 109 `ui `uc
 ]
-[; ;rampa.h: 53: const unsigned char broadcast_id = 'm';
-"54
+[; ;rampa.h: 55: const unsigned char broadcast_id = 'm';
+"56
 [v _tiempo_rampa `ui ~T0 @X0 1 e ]
 [i _tiempo_rampa
 -> -> 0 `i `ui
 ]
-[; ;rampa.h: 54: unsigned int tiempo_rampa=0;
-"55
+[; ;rampa.h: 56: unsigned int tiempo_rampa=0;
+"57
 [v _rampa_status `uc ~T0 @X0 1 e ]
 [i _rampa_status
 -> -> 0 `i `uc
 ]
-[; ;rampa.h: 55: unsigned char rampa_status=0;
-[; ;rampa.h: 61: unsigned char decode(unsigned char);
-[; ;rampa.h: 62: void assign_id(unsigned char nro_esclavo);
-[; ;rampa.h: 63: void RAMPA_tic(void);
-[; ;rampa.h: 64: void transmitir(char dato);
-[; ;rampa.h: 65: void informar(char *cadena,char longitud);
-[; ;rampa.h: 66: void rampa_ini13(void);
+[; ;rampa.h: 57: unsigned char rampa_status=0;
+[; ;rampa.h: 63: unsigned char decode(unsigned char);
+[; ;rampa.h: 64: void assign_id(unsigned char nro_esclavo);
+[; ;rampa.h: 65: void RAMPA_tic(void);
+[; ;rampa.h: 66: void transmitir(char dato);
+[; ;rampa.h: 67: void informar(char *cadena,char longitud);
+[; ;rampa.h: 68: void rampa_ini13(void);
 [; ;Ap_ini.h: 40: void pic_ini13(void);
 [; ;Ap_ini.h: 41: void timer_ini13(void);
 [; ;Ap_ini.h: 42: void timer1_ini13();
@@ -5146,6 +5178,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :U _transmitir ]
 [v _Dato `uc ~T0 @X0 1 r1 ]
 [f ]
+[; ;rampa.c: 72: LATDbits.LD3=1;
+"72
+[e = . . _LATDbits 4 1 -> -> 1 `i `uc ]
 [; ;rampa.c: 73: while(!TXSTAbits.TRMT);
 "73
 [e $U 614  ]
@@ -5163,6 +5198,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :U 617 ]
 [e $ ! != -> . . _TXSTAbits 0 1 `i -> -> -> 0 `i `Vuc `i 618  ]
 [e :U 619 ]
+[; ;rampa.c: 76: LATDbits.LD3=0;
+"76
+[e = . . _LATDbits 4 1 -> -> 0 `i `uc ]
 [; ;rampa.c: 78: }
 "78
 [e :UE 613 ]

@@ -69,11 +69,11 @@ void informar(char *dato, char longitud){
 
 }
 void transmitir(char Dato){        //transmite un char
-    
+    RESPONDER_ON;
     while(!TXSTAbits.TRMT);
     TXREG = Dato;                           //se transmite el dato
     while(!TXSTAbits.TRMT);
-   
+    RESPONDER_OFF;
     
 }
 

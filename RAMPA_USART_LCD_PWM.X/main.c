@@ -73,26 +73,26 @@ void main(void) {
                 }break;
                 case start:{
                     LED1=1;
-                    LED2=0;
+                    //LED2=0;
                     rampa_status=ON;
                     INTCONbits.INT0IF=0;
                     INTCONbits.INT0IE=1;
                 }break;
                 case stop:{
                     LED1=0;
-                    LED2=1;
+                    //LED2=1;
                     rampa_status=OFF;
                 }break;
                 case lectura:{
                     if(!broadcast_flag){        //me aseguro que no se escriba
                     LED1=1;
-                    LED2=1;
+                    //LED2=1;
                     informar(paquete,4);        //envia la lectura
                     }
                 }break;
                 case reset:{
                     LED1=0;
-                    LED2=0;
+                    //LED2=0;
                     tiempo_rampa=0;
                 }break;
             }

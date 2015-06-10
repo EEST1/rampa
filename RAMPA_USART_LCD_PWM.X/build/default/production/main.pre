@@ -6363,7 +6363,7 @@ void tic_timer0(void);
 unsigned char mux_tout,bot_tout;
 unsigned int led_tout;
 
-# 41 "rampa.h"
+# 43 "rampa.h"
 enum estados{
 address,
 comando,
@@ -6380,7 +6380,7 @@ const unsigned char broadcast_id = 'm';
 unsigned int tiempo_rampa=0;
 unsigned char rampa_status=0;
 
-# 61
+# 63
 unsigned char decode(unsigned char);
 void assign_id(unsigned char nro_esclavo);
 void RAMPA_tic(void);
@@ -6425,26 +6425,26 @@ broadcast_flag=1;
 }break;
 case 's':{
 LATDbits.LD2=1;
-LATDbits.LD3=0;
+
 rampa_status=1;
 INTCONbits.INT0IF=0;
 INTCONbits.INT0IE=1;
 }break;
 case 'd':{
 LATDbits.LD2=0;
-LATDbits.LD3=1;
+
 rampa_status=0;
 }break;
 case 'l':{
 if(!broadcast_flag){
 LATDbits.LD2=1;
-LATDbits.LD3=1;
+
 informar(paquete,4);
 }
 }break;
 case 'r':{
 LATDbits.LD2=0;
-LATDbits.LD3=0;
+
 tiempo_rampa=0;
 }break;
 }

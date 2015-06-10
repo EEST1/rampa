@@ -31,7 +31,9 @@ extern "C" {
 #define OFF 0
 #define ON 1
 
-#define SAL_IR LATBbits.LATB7
+#define SAL_IR LATBbits.LATB7       //salida de 38.2KHz para el LED INFRAROJO
+#define RESPONDER_ON   LATDbits.LD3=1
+#define RESPONDER_OFF   LATDbits.LD3=0
 
 
 

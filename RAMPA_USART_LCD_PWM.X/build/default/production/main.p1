@@ -28,9 +28,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S547 . . . . . . ]
 "9209
 [v _INTCONbits `VS547 ~T0 @X0 0 e@4082 ]
-"62 rampa.h
+"64 rampa.h
 [v _assign_id `(v ~T0 @X0 0 ef1`uc ]
-"66
+"68
 [v _rampa_ini13 `(v ~T0 @X0 0 ef ]
 "3746 /opt/microchip/xc8/v1.33/include/pic18f4550.h
 [s S272 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -64,9 +64,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S271 . . . . . . . . . . ]
 "3788
 [v _LATDbits `VS271 ~T0 @X0 0 e@3980 ]
-"65 rampa.h
+"67 rampa.h
 [v _informar `(v ~T0 @X0 0 ef2`*uc`uc ]
-"61
+"63
 [v _decode `(uc ~T0 @X0 0 ef1`uc ]
 "16 Lemos.h
 [v _Send_4Disp `(v ~T0 @X0 0 ef4`uc`uc`uc`uc ]
@@ -78,7 +78,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _TMR0H `Vuc ~T0 @X0 0 e@4055 ]
 "18 Lemos.h
 [v _tic_timer0 `(v ~T0 @X0 0 ef ]
-"63 rampa.h
+"65 rampa.h
 [v _RAMPA_tic `(v ~T0 @X0 0 ef ]
 "10809 /opt/microchip/xc8/v1.33/include/pic18f4550.h
 [v _TMR1IF `Vb ~T0 @X0 0 e@31984 ]
@@ -5020,39 +5020,39 @@ Version 3.2 HI-TECH Software Intermediate Code
 "22
 [v _led_tout `ui ~T0 @X0 1 e ]
 [; ;Lemos.h: 22: unsigned int led_tout;
-[; ;rampa.h: 41: enum estados{
-[; ;rampa.h: 42: address,
-[; ;rampa.h: 43: comando,
-[; ;rampa.h: 44: fin,
-[; ;rampa.h: 45: respuesta
-[; ;rampa.h: 47: };
-"52 rampa.h
+[; ;rampa.h: 43: enum estados{
+[; ;rampa.h: 44: address,
+[; ;rampa.h: 45: comando,
+[; ;rampa.h: 46: fin,
+[; ;rampa.h: 47: respuesta
+[; ;rampa.h: 49: };
+"54 rampa.h
 [v _slave_id `uc ~T0 @X0 1 e ]
-[; ;rampa.h: 52: unsigned char slave_id;
-"53
+[; ;rampa.h: 54: unsigned char slave_id;
+"55
 [v _broadcast_id `Cuc ~T0 @X0 1 e ]
 [i _broadcast_id
 -> -> 109 `ui `uc
 ]
-[; ;rampa.h: 53: const unsigned char broadcast_id = 'm';
-"54
+[; ;rampa.h: 55: const unsigned char broadcast_id = 'm';
+"56
 [v _tiempo_rampa `ui ~T0 @X0 1 e ]
 [i _tiempo_rampa
 -> -> 0 `i `ui
 ]
-[; ;rampa.h: 54: unsigned int tiempo_rampa=0;
-"55
+[; ;rampa.h: 56: unsigned int tiempo_rampa=0;
+"57
 [v _rampa_status `uc ~T0 @X0 1 e ]
 [i _rampa_status
 -> -> 0 `i `uc
 ]
-[; ;rampa.h: 55: unsigned char rampa_status=0;
-[; ;rampa.h: 61: unsigned char decode(unsigned char);
-[; ;rampa.h: 62: void assign_id(unsigned char nro_esclavo);
-[; ;rampa.h: 63: void RAMPA_tic(void);
-[; ;rampa.h: 64: void transmitir(char dato);
-[; ;rampa.h: 65: void informar(char *cadena,char longitud);
-[; ;rampa.h: 66: void rampa_ini13(void);
+[; ;rampa.h: 57: unsigned char rampa_status=0;
+[; ;rampa.h: 63: unsigned char decode(unsigned char);
+[; ;rampa.h: 64: void assign_id(unsigned char nro_esclavo);
+[; ;rampa.h: 65: void RAMPA_tic(void);
+[; ;rampa.h: 66: void transmitir(char dato);
+[; ;rampa.h: 67: void informar(char *cadena,char longitud);
+[; ;rampa.h: 68: void rampa_ini13(void);
 "33 main.c
 [v _caracter_recibido `uc ~T0 @X0 1 e ]
 [; ;main.c: 33: unsigned char caracter_recibido;
@@ -5156,9 +5156,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 75: LATDbits.LD2=1;
 "75
 [e = . . _LATDbits 3 1 -> -> 1 `i `uc ]
-[; ;main.c: 76: LATDbits.LD3=0;
-"76
-[e = . . _LATDbits 4 1 -> -> 0 `i `uc ]
 [; ;main.c: 77: rampa_status=1;
 "77
 [e = _rampa_status -> -> 1 `i `uc ]
@@ -5179,9 +5176,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 82: LATDbits.LD2=0;
 "82
 [e = . . _LATDbits 3 1 -> -> 0 `i `uc ]
-[; ;main.c: 83: LATDbits.LD3=1;
-"83
-[e = . . _LATDbits 4 1 -> -> 1 `i `uc ]
 [; ;main.c: 84: rampa_status=0;
 "84
 [e = _rampa_status -> -> 0 `i `uc ]
@@ -5200,9 +5194,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 88: LATDbits.LD2=1;
 "88
 [e = . . _LATDbits 3 1 -> -> 1 `i `uc ]
-[; ;main.c: 89: LATDbits.LD3=1;
-"89
-[e = . . _LATDbits 4 1 -> -> 1 `i `uc ]
 [; ;main.c: 90: informar(paquete,4);
 "90
 [e ( _informar (2 , &U _paquete -> -> 4 `i `uc ]
@@ -5221,9 +5212,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 94: LATDbits.LD2=0;
 "94
 [e = . . _LATDbits 3 1 -> -> 0 `i `uc ]
-[; ;main.c: 95: LATDbits.LD3=0;
-"95
-[e = . . _LATDbits 4 1 -> -> 0 `i `uc ]
 [; ;main.c: 96: tiempo_rampa=0;
 "96
 [e = _tiempo_rampa -> -> 0 `i `ui ]

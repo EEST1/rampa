@@ -6302,7 +6302,7 @@ extern __nonreentrant void _delaywdt(unsigned long);
 #pragma intrinsic(_delay3)
 extern __nonreentrant void _delay3(unsigned char);
 
-# 41 "rampa.h"
+# 43 "rampa.h"
 enum estados{
 address,
 comando,
@@ -6319,7 +6319,7 @@ const unsigned char broadcast_id = 'm';
 unsigned int tiempo_rampa=0;
 unsigned char rampa_status=0;
 
-# 61
+# 63
 unsigned char decode(unsigned char);
 void assign_id(unsigned char nro_esclavo);
 void RAMPA_tic(void);
@@ -6402,11 +6402,11 @@ transmitir('f');
 
 }
 void transmitir(char Dato){
-
+LATDbits.LD3=1;
 while(!TXSTAbits.TRMT);
 TXREG = Dato;
 while(!TXSTAbits.TRMT);
-
+LATDbits.LD3=0;
 
 }
 
