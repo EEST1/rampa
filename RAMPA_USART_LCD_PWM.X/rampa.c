@@ -15,6 +15,9 @@ void assign_id(unsigned char id){
 void RAMPA_tic(void){
     if(tiempo_rampa<9999)tiempo_rampa++;
 }
+void ENVIO_tic(void){
+    if(demora_envio)demora_envio--;
+}
 
 unsigned char decode(unsigned char dato_a_decod){
 /*esta función es una máquina de estados que recorre los distintos bytes del

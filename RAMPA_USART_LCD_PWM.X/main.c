@@ -87,7 +87,11 @@ void main(void) {
                     if(!broadcast_flag){        //me aseguro que no se escriba
                     LED1=1;
                     //LED2=1;
+                    demora_envio=demora_envio_set;
+                    envio_status=ON;
+                    while(demora_envio);
                     informar(paquete,4);        //envia la lectura
+                    envio_status=OFF;
                     }
                 }break;
                 case reset:{
@@ -133,6 +137,7 @@ void __interrupt myISR(){
         #endif
         #ifdef RAMPA_H
            if(rampa_status) RAMPA_tic();
+           if(demora_envio) ENVIO_tic(); 
 
         #endif
         }

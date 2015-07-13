@@ -26,6 +26,7 @@ extern "C" {
 #define EOM 'f'                     //fin de mensaje
 #define broadcast 'b'               //indicador de broadcast
 #define per2per 'p'                 //indicador de direccionamiento unico
+#define demora_envio_set    5
 
 #define ninguno 0
 #define OFF 0
@@ -53,9 +54,10 @@ enum estados{                       //los estados posibles
 
 unsigned char slave_id;                     //fija el id
 const unsigned char broadcast_id = 'm';     //fija el broadcast_id
-unsigned int tiempo_rampa=0;                         //inicializa el tiempod e cuenta
+unsigned int tiempo_rampa=0;                //inicializa el tiempod e cuenta
 unsigned char rampa_status=OFF;             //estado de la rampa
-
+unsigned char envio_status=OFF;
+unsigned char demora_envio=0;
 
 
 
@@ -63,6 +65,7 @@ unsigned char rampa_status=OFF;             //estado de la rampa
 unsigned char decode(unsigned char);    //decodifica el paquete
 void assign_id(unsigned char nro_esclavo);          //inicializa el id del esclavo
 void RAMPA_tic(void);                   //cuenta cada interrupción de timer
+void ENVIO_tic(void);                   //cuenta cada interrupción de timer
 void transmitir(char dato);                  //transmite un char
 void informar(char *cadena,char longitud);
 void rampa_ini13(void);                 //inicializa la rampa
