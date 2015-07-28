@@ -6304,13 +6304,12 @@ extern __nonreentrant void _delaywdt(unsigned long);
 #pragma intrinsic(_delay3)
 extern __nonreentrant void _delay3(unsigned char);
 
-# 44 "rampa.h"
+# 47 "rampa.h"
 enum estados{
 address,
 comando,
 fin,
 respuesta
-
 };
 
 
@@ -6320,8 +6319,10 @@ unsigned char slave_id;
 const unsigned char broadcast_id = 'm';
 unsigned int tiempo_rampa=0;
 unsigned char rampa_status=0;
-unsigned char envio_status=0;
 unsigned char demora_envio=0;
+
+unsigned char modula=2;
+unsigned char flag_modula =0;
 
 
 
@@ -6330,6 +6331,7 @@ unsigned char decode(unsigned char);
 void assign_id(unsigned char nro_esclavo);
 void RAMPA_tic(void);
 void ENVIO_tic(void);
+void MODULA_tic(void);
 void transmitir(char dato);
 void informar(char *cadena,char longitud);
 void rampa_ini13(void);
@@ -6347,6 +6349,7 @@ void rampa_ini13(void){
 rampa_status = 0;
 tiempo_rampa = 0;
 TRISBbits.RB7 = 0;
+TRISBbits.RB0 = 1;
 INTCON2bits.INTEDG0=0;
 }
 
@@ -6359,10 +6362,17 @@ if(tiempo_rampa<9999)tiempo_rampa++;
 void ENVIO_tic(void){
 if(demora_envio)demora_envio--;
 }
+void MODULA_tic(void){
+if(modula)modula--;
+else{
+flag_modula=~flag_modula;
+modula=2;
+}
+}
 
 unsigned char decode(unsigned char dato_a_decod){
 
-# 26
+# 34
 static unsigned char est_rec=address;
 
 static char com_rec;
@@ -6405,18 +6415,26 @@ return retorno;
 }
 void informar(char *dato, char longitud){
 char i=0;
+LATDbits.LD3=1;
+demora_envio=15;
+while(demora_envio);
+
 transmitir(slave_id);
+
 for(i=0;i<longitud;i++) transmitir(*(dato+i)+48);
 
 transmitir('f');
 
+demora_envio=15-10;
+while(demora_envio);
+LATDbits.LD3=0;
 }
 void transmitir(char Dato){
-LATDbits.LD3=1;
+
 while(!TXSTAbits.TRMT);
 TXREG = Dato;
-while(!TXSTAbits.TRMT);
-LATDbits.LD3=0;
+
+
 
 }
 

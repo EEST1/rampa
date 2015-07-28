@@ -6,6 +6,7 @@ void rampa_ini13(void){
     rampa_status = OFF;             //global definida en rampa
     tiempo_rampa = 0;               //global lleva la cuenta en milisegundos
     TRISBbits.RB7 = 0;              //Salida IR
+    TRISBbits.RB0 = 1;              //Entrada 
     INTCON2bits.INTEDG0=0;          //interrupt in falling edge
 }
 
@@ -17,6 +18,13 @@ void RAMPA_tic(void){
 }
 void ENVIO_tic(void){
     if(demora_envio)demora_envio--;
+}
+void MODULA_tic(void){
+    if(modula)modula--;
+    else{
+        flag_modula=~flag_modula;
+        modula=modula_set;
+    }
 }
 
 unsigned char decode(unsigned char dato_a_decod){
@@ -65,18 +73,26 @@ unsigned char decode(unsigned char dato_a_decod){
 }
 void informar(char *dato, char longitud){
     char i=0;
-    transmitir(slave_id);
-    for(i=0;i<longitud;i++) transmitir(*(dato+i)+48);
+    RESPONDER_ON;                           //toma el canal cedido por el
+    demora_envio=demora_envio_set;          //maestro                  
+    while(demora_envio);                    //espera un tiempo para asegurar
+                                            //la dirección correcta del BUS
+    transmitir(slave_id);                   //transmite el address 
+    
+    for(i=0;i<longitud;i++) transmitir(*(dato+i)+48);   //transmite el dato
 
-    transmitir(EOM);
-
+    transmitir(EOM);                        //finaliza el mensaje con EOM
+    
+    demora_envio=demora_envio_set-10;       //espera un tiempo para devolver              
+    while(demora_envio);                    //el canal al maestro
+    RESPONDER_OFF;                          //cede el canal
 }
 void transmitir(char Dato){        //transmite un char
-    RESPONDER_ON;
+    
     while(!TXSTAbits.TRMT);
     TXREG = Dato;                           //se transmite el dato
-    while(!TXSTAbits.TRMT);
-    RESPONDER_OFF;
+    //while(!TXSTAbits.TRMT);
+    
     
 }
 

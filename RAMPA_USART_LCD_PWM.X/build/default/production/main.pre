@@ -6365,13 +6365,12 @@ void tic_timer0(void);
 unsigned char mux_tout,bot_tout;
 unsigned int led_tout;
 
-# 44 "rampa.h"
+# 47 "rampa.h"
 enum estados{
 address,
 comando,
 fin,
 respuesta
-
 };
 
 
@@ -6381,8 +6380,10 @@ unsigned char slave_id;
 const unsigned char broadcast_id = 'm';
 unsigned int tiempo_rampa=0;
 unsigned char rampa_status=0;
-unsigned char envio_status=0;
 unsigned char demora_envio=0;
+
+unsigned char modula=2;
+unsigned char flag_modula =0;
 
 
 
@@ -6391,6 +6392,7 @@ unsigned char decode(unsigned char);
 void assign_id(unsigned char nro_esclavo);
 void RAMPA_tic(void);
 void ENVIO_tic(void);
+void MODULA_tic(void);
 void transmitir(char dato);
 void informar(char *cadena,char longitud);
 void rampa_ini13(void);
@@ -6401,7 +6403,7 @@ unsigned char caracter_recibido;
 void main(void) {
 unsigned char backup_ultimo_caracter;
 unsigned int backup_tiempo_rampa;
-char seg=0,dec=0,cent=0,mil=0;
+
 char paquete[4];
 unsigned char broadcast_flag=0;
 
@@ -6410,6 +6412,11 @@ timer_ini13();
 
 timer1_ini13();
 usart_ini13();
+
+BAUDCONbits.RXCKP = 1;
+BAUDCONbits.TXCKP = 1;
+
+
 (INTCONbits.GIE = 1);
 
 assign_id('a');
@@ -6420,7 +6427,7 @@ while(1){
 if(caracter_recibido != backup_ultimo_caracter){
 backup_ultimo_caracter=caracter_recibido;
 
-# 65
+# 76
 switch(decode(caracter_recibido)){
 case 0:;
 break;
@@ -6431,31 +6438,20 @@ case 'b':{
 broadcast_flag=1;
 }break;
 case 's':{
-LATDbits.LD2=1;
-
 rampa_status=1;
 INTCONbits.INT0IF=0;
 INTCONbits.INT0IE=1;
 }break;
 case 'd':{
-LATDbits.LD2=0;
-
 rampa_status=0;
+INTCONbits.INT0IE=0;
+INTCONbits.INT0IF=0;
 }break;
 case 'l':{
-if(!broadcast_flag){
-LATDbits.LD2=1;
+if(!broadcast_flag) informar(paquete,4);
 
-demora_envio=5;
-envio_status=1;
-while(demora_envio);
-informar(paquete,4);
-envio_status=0;
-}
 }break;
 case 'r':{
-LATDbits.LD2=0;
-
 tiempo_rampa=0;
 }break;
 }
@@ -6477,7 +6473,6 @@ Send_4Disp(paquete[0],paquete[1],paquete[2],paquete[3]);
 
 void __interrupt myISR(){
 
-# 128
 if(TMR0IF){
 INTCONbits.TMR0IF = 0;
 TMR0L = 209;
@@ -6485,9 +6480,11 @@ TMR0H = 0xFF;
 
 tic_timer0();
 
-# 139
+# 132
 if(rampa_status) RAMPA_tic();
 if(demora_envio) ENVIO_tic();
+
+
 
 
 }
@@ -6497,7 +6494,10 @@ if(TMR1IF){
 PIR1bits.TMR1IF = 0;
 TMR1L=144;
 TMR1H=0xFF;
-LATBbits.LATB7 =~ LATBbits.LATB7;
+
+
+LATBbits.LATB7 = ~LATBbits.LATB7;
+
 }
 if(RCIF){
 RCIF=0;
