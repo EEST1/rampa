@@ -6304,7 +6304,7 @@ extern __nonreentrant void _delaywdt(unsigned long);
 #pragma intrinsic(_delay3)
 extern __nonreentrant void _delay3(unsigned char);
 
-# 47 "rampa.h"
+# 50 "rampa.h"
 enum estados{
 address,
 comando,
@@ -6320,7 +6320,7 @@ const unsigned char broadcast_id = 'm';
 unsigned int tiempo_rampa=0;
 unsigned char rampa_status=0;
 unsigned char demora_envio=0;
-
+unsigned int demora_solenoide=0;;
 unsigned char modula=2;
 unsigned char flag_modula =0;
 
@@ -6332,6 +6332,7 @@ void assign_id(unsigned char nro_esclavo);
 void RAMPA_tic(void);
 void ENVIO_tic(void);
 void MODULA_tic(void);
+void SOLENOIDE_tic(void);
 void transmitir(char dato);
 void informar(char *cadena,char longitud);
 void rampa_ini13(void);
@@ -6369,10 +6370,14 @@ flag_modula=~flag_modula;
 modula=2;
 }
 }
+void SOLENOIDE_tic(void){
+if(demora_solenoide)demora_solenoide--;
+else LATDbits.LD2 = 0;
+}
 
 unsigned char decode(unsigned char dato_a_decod){
 
-# 34
+# 38
 static unsigned char est_rec=address;
 
 static char com_rec;

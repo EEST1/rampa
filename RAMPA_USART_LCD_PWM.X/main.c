@@ -38,6 +38,7 @@ void main(void) {
     
     char paquete[4];                        //arreglo para el envio serie
     unsigned char broadcast_flag=0;         //flag auxiliar de broadcast
+    backup_tiempo_rampa = ReadADC();
           
     pic_ini13();                    //inicializa las ent/salidas del shield 1.3
     timer_ini13();                  //inicializa el timer en 1ms para habilitar
@@ -87,6 +88,8 @@ void main(void) {
                     rampa_status=ON;
                     INTCONbits.INT0IF=0;
                     INTCONbits.INT0IE=1;
+                    SOLENOIDE_ON;
+                    demora_solenoide = demora_solenoide_set;
                 }break;
                 case stop:{                   
                     rampa_status=OFF;
@@ -132,6 +135,7 @@ void __interrupt myISR(){
         #ifdef RAMPA_H
            if(rampa_status) RAMPA_tic();    //incrementa el tiempo de rampa
            if(demora_envio) ENVIO_tic();    //decrementa la demora_envio
+           if(SOLENOIDE) SOLENOIDE_tic();
           //  MODULA_tic();
            
 

@@ -28,16 +28,19 @@ extern "C" {
 #define per2per 'p'                 //indicador de direccionamiento unico
 #define demora_envio_set   15
 #define modula_set 2
+#define demora_solenoide_set 1000;
 
 #define ninguno 0
 #define OFF 0
 #define ON 1
+#define SOLENOIDE       LATDbits.LD2
 
 #define SAL_IR LATBbits.LATB7       //salida de 38.2KHz para el LED INFRAROJO
 #define RESPONDER_ON    LATDbits.LD3=1
 #define RESPONDER_OFF   LATDbits.LD3=0
-#define SOLENOIDE_ON    LATDbits.LD2=1
-#define SOLENOIDE_OFF   LATDbits.LD2=0
+#define SOLENOIDE_ON    SOLENOIDE = 1
+#define SOLENOIDE_OFF   SOLENOIDE = 0
+
 
 
 
@@ -59,7 +62,7 @@ const unsigned char broadcast_id = 'm';     //fija el broadcast_id
 unsigned int tiempo_rampa=0;                //inicializa el tiempod e cuenta
 unsigned char rampa_status=OFF;             //estado de la rampa
 unsigned char demora_envio=0;               //variable auxiliar para el ajuste
-                                            //de los tiempos en el protocolo
+unsigned int demora_solenoide=0;;                                            //de los tiempos en el protocolo
 unsigned char modula=modula_set;
 unsigned char flag_modula =0;
 
@@ -71,6 +74,7 @@ void assign_id(unsigned char nro_esclavo);          //inicializa el id del escla
 void RAMPA_tic(void);                   //cuenta cada interrupción de timer
 void ENVIO_tic(void);                   //cuenta cada interrupción de timer
 void MODULA_tic(void);
+void SOLENOIDE_tic(void);
 void transmitir(char dato);                  //transmite un char
 void informar(char *cadena,char longitud);
 void rampa_ini13(void);                 //inicializa la rampa

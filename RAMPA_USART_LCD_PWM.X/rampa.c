@@ -17,7 +17,7 @@ void RAMPA_tic(void){
     if(tiempo_rampa<9999)tiempo_rampa++;
 }
 void ENVIO_tic(void){
-    if(demora_envio)demora_envio--;
+    if(demora_envio)demora_envio--;     //mejorar!!!!!!!!
 }
 void MODULA_tic(void){
     if(modula)modula--;
@@ -25,6 +25,10 @@ void MODULA_tic(void){
         flag_modula=~flag_modula;
         modula=modula_set;
     }
+}
+void SOLENOIDE_tic(void){
+    if(demora_solenoide)demora_solenoide--;
+    else SOLENOIDE_OFF;
 }
 
 unsigned char decode(unsigned char dato_a_decod){
